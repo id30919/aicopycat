@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>😽AI卡比貓的奇幻旅程</title>
+    
+    <!-- 引入 EmailJS SDK (已填入你的 Public Key) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init("wzXHDVb-bWlLS7jMO");
+       })();
+    </script>
+
+    <style>
+        /* --- 全域設定 --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fff0f5; color: #4a4a4a; line-height: 1.6; }
+        
+        /* --- 導覽列 --- */
+        header {
+            background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        nav { display: flex; justify-content: center; gap: 15px; }
+        nav a { color: #555; text-decoration: none; font-weight: bold; padding: 8px 12px; border-radius: 20px; background: rgba(255,255,255,0.6); transition: 0.3s; }
+        nav a:hover { background: white; color: #ff6b6b; }
+
+        /* --- 主標題 --- */
+        .hero { text-align: center; padding: 40px 20px; }
+        .hero h1 { font-size: 2rem; color: #ff6b6b; margin-bottom: 10px; }
+        
+        section { padding: 30px 20px; max-width: 900px; margin: 0 auto; }
+        h2 { border-left: 5px solid #ff9a9e; padding-left: 10px; margin-bottom: 20px; color: #333; }
+
+        /* --- 作品集 --- */
+        .project-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border: 1px solid #ffecec; }
+        .project-title { padding: 12px; background: #fff5f7; font-weight: bold; text-align: center; color: #d63384; }
+        iframe { width: 100%; height: 400px; border: none; display: block; }
+
+        /* --- 留言區塊樣式 --- */
+        .comment-section {
+            background: #fff;
+            padding: 20px;
+            border-top: 1px dashed #ffcba4;
+        }
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .input-group { display: flex; gap: 10px; }
+        input, textarea { 
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; 
+            background: #fdfdfd;
+        }
+        /* 驗證碼區塊 */
+        .captcha-box {
+            display: flex; align-items: center; gap: 10px; background: #f0f0f0; padding: 10px; border-radius: 8px; font-weight: bold; color: #555;
+        }
+        .captcha-input { width: 60px; text-align: center; }
+
+        button.submit-btn {
+            background-color: #ff9a9e; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s;
+        }
+        button.submit-btn:hover { background-color: #ff6b6b; }
+        button.submit-btn:disabled { background-color: #ddd; cursor: not-allowed; }
+
+        /* 留言列表 */
+        .comment-list { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+        .single-comment { 
+            background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.95em; position: relative;
+        }
+        .comment-header { font-weight: bold; color: #333; display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px;}
+        .comment-email { color: #999; font-size: 0.8em; font-weight: normal; }
+        .reply-tag { color: blue; cursor: pointer; font-size: 0.8em; }
+
+        /* --- 頁尾 --- */
+        footer { text-align: center; padding: 30px; color: #aaa; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="#portfolio">奇幻作品</a>
+            <a href="#notes">冒險筆記</a>
+            <a href="#contact">召喚卡比貓</a>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>😽 AI 卡比貓的奇幻旅程</h1>
+        <p>歡迎來到我的程式魔法書，這裡記錄了每一次的冒險！</p>
+    </div>
+
+    <!-- 區塊：作品集 -->
+    <section id="portfolio">
+        <h2>📂 奇幻作品集</h2>
+        
+        <!-- 作品 01 -->
+        <div class="project-card">
+            <div class="project-title">Project 01：魔法傳送門 (測試網頁)</div>
+            
+            <!-- ★ 請確認你的 GitHub 裡有 project1.html 這個檔案 -->
+            <iframe src="project1.html"></iframe> 
+            
+            <div class="comment-section" id="comment-box-1">
+                <h4>💬 旅人留言板</h4>
+                <div class="comment-list" id="list-1"></div>
+                
+                <div class="comment-form">
+                    <div class="input-group">
+                        <input type="text" id="name-1" placeholder="你的暱稱" required>
+                        <input type="email" id="email-1" placeholder="Email (不會公開)" required>
+                    </div>
+                    <textarea id="msg-1" rows="3" placeholder="寫下你的冒險心得..."></textarea>
+                    
+                    <div class="captcha-box">
+                        <span id="captcha-q-1">1 + 1 = ?</span>
+                        <input type="number" id="captcha-a-1" class="captcha-input" placeholder="?">
+                    </div>
+
+                    <button class="submit-btn" onclick="postComment(1)">送出留言 🚀</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品 02 -->
+        <div class="project-card">
+            <div class="project-title">Project 02：時光鐘塔 (數位時鐘)</div>
+            
+            <!-- ★ 請確認你的 GitHub 裡有 clock.html 這個檔案 -->
+            <iframe src="clock.html"></iframe> 
+            
+            <div class="comment-section" id="comment-box-2">
+                <h4>💬 旅人留言板</h4>
+                <div class="comment-list" id="list-2"></div>
+                
+                <div class="comment-form">
+                    <div class="input-group">
+                        <input type="text" id="name-2" placeholder="你的暱稱">
+                        <input type="email" id="email-2" placeholder="Email">
+                    </div>
+                    <textarea id="msg-2" rows="3" placeholder="寫下你的冒險心得..."></textarea>
+                    
+                    <div class="captcha-box">
+                        <span id="captcha-q-2"></span>
+                        <input type="number" id="captcha-a-2" class="captcha-input">
+                    </div>
+
+                    <button class="submit-btn" onclick="postComment(2)">送出留言 🚀</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Coding 筆記 -->
+    <section id="notes">
+        <h2>📝 冒險筆記</h2>
+        <div style="background:white; padding:20px; border-radius:10px;">
+            <h3>今天學會了如何召喚 iframe</h3>
+            <p>原來網頁裡面可以包網頁，就像俄羅斯娃娃一樣神奇...</p>
+            <hr style="margin:10px 0; border:0; border-top:1px dashed #ddd;">
+            <p style="color:#888; font-size:0.9em;">(留言功能測試區)</p>
+        </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <section id="contact">
+        <footer style="margin-top: 0;">
+            © 2025 AI 卡比貓的奇幻旅程 | Created with HTML & Magic
+        </footer>
+    </section>
+
+    <!-- ★★★ 魔法核心：寄信邏輯 (已填入你的 ID) ★★★ -->
+    <script>
+        // 設定你的 EmailJS ID
+        const serviceID = "service_aicopycat";
+        const templateID = "template_aicopycat";
+
+        // 儲存算術答案
+        let answers = {};
+
+        // 初始化驗證碼
+        function initCaptcha(id) {
+            let num1 = Math.floor(Math.random() * 10) + 1;
+            let num2 = Math.floor(Math.random() * 10) + 1;
+            answers[id] = num1 + num2;
+            let qElement = document.getElementById('captcha-q-' + id);
+            if(qElement) qElement.innerText = `驗證：${num1} + ${num2} = ?`;
+        }
+
+        // 啟動驗證碼
+        window.onload = function() {
+            initCaptcha(1);
+            initCaptcha(2);
+        };
+
+        // 送出留言並寄信
+        function postComment(id) {
+            let name = document.getElementById('name-' + id).value;
+            let email = document.getElementById('email-' + id).value;
+            let msg = document.getElementById('msg-' + id).value;
+            let userAnswer = document.getElementById('captcha-a-' + id).value;
+            let btn = document.querySelector(`#comment-box-${id} button`); 
+
+            // 檢查空值
+            if(name === "" || msg === "" || email === "") {
+                alert("請填寫完整資訊 (暱稱、Email、內容) 😾");
+                return;
+            }
+
+            // 檢查驗證碼
+            if(parseInt(userAnswer) !== answers[id]) {
+                alert("算術錯誤！機器人走開！🤖");
+                return;
+            }
+
+            // --- 開始寄信流程 ---
+            
+            // 1. 讓按鈕變色並顯示處理中
+            let originalText = btn.innerText;
+            btn.innerText = "傳送中...";
+            btn.disabled = true; 
+
+            // 2. 準備要寄給 EmailJS 的資料
+            let params = {
+                from_name: name,
+                from_email: email,
+                message: msg,
+                project_name: (id === 1) ? "魔法傳送門" : "時光鐘塔" // 這裡對應你的作品名稱
+            };
+
+            // 3. 呼叫 EmailJS 寄信
+            emailjs.send(serviceID, templateID, params)
+                .then(function(response) {
+                    alert("✅ 留言成功！通知信已寄出！");
+                    
+                    // 顯示留言在畫面上
+                    let list = document.getElementById('list-' + id);
+                    let time = new Date().toLocaleString();
+                    list.innerHTML += `
+                        <div class="single-comment">
+                            <div class="comment-header">
+                                <span>${name}</span> <span style="font-size:0.8em; color:#aaa;">${time}</span>
+                            </div>
+                            <p>${msg}</p>
+                            <p style="font-size:0.8em; color:green; margin-top:5px;">(系統：已發信通知站長)</p>
+                        </div>`;
+
+                    // 清空輸入框
+                    document.getElementById('msg-' + id).value = "";
+                    document.getElementById('captcha-a-' + id).value = "";
+                    initCaptcha(id);
+
+                }, function(error) {
+                    alert("❌ 寄信失敗，請檢查網路。\n錯誤代碼：" + JSON.stringify(error));
+                })
+                .finally(function() {
+                    // 恢復按鈕
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+        }
+    </script>
+
+</body>
+</html>
