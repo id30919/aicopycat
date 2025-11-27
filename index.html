@@ -64,28 +64,28 @@
             background: white;
             padding: 30px 20px;
             border-radius: 15px;
-            text-align: center;
+            text-align: center; /* 讓內容水平置中 */
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             margin-top: 50px;
         }
 
-        /* 社群按鈕 (只剩下 Threads) */
+        /* 社群按鈕 */
         .social-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             margin: 10px;
-            padding: 15px 30px; /* 按鈕加大 */
+            padding: 15px 30px;
             color: white;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem; /* 字體加大 */
+            font-size: 1.1rem;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             width: 100%;
             max-width: 350px;
-            background: #000; /* Threads 黑色 */
+            background: #000;
         }
         .social-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); background: #333; }
 
@@ -182,12 +182,17 @@
     ========================== -->
     <section id="contact">
         <div class="contact-box">
-            <h2 style="margin-bottom: 20px; color: #333;">📬 關於卡比貓</h2>
-            <p style="color: #666; margin-bottom: 30px;"> <p style="text-align:left;">
-本人文組畢，從沒學過coding，英文也很破…我可以 你們絕對也行！<br>
-如果順利產出自己的新作品，記得回來跟我分享 😋 一起來Coding吧！🤩
-</p>
+            <h2 style="margin-bottom: 0px; color: #333;">📬 關於卡比貓</h2>
             
+            <!-- ★★★ 修改處：文字置中區塊 ★★★ -->
+            <!-- display: inline-block 讓這個區塊的寬度剛好包住文字 -->
+            <!-- text-align: left 讓文字在區塊內靠左對齊 -->
+            <!-- margin: 20px 0 30px 0 分別設定 上、右、下、左 的間距 -->
+            <div style="display: inline-block; text-align: left; margin: 25px 0 35px 0; color: #555; line-height: 1.8; max-width: 100%;">
+                本人文組畢，從沒學過coding，英文也很破…我可以 你們絕對也行！<br>
+                如果順利產出自己的新作品，記得回來跟我分享 😋 一起來Coding吧！🤩
+            </div>
+
             <!-- 只保留 Threads 連結 -->
             <div>
                 <a href="https://www.threads.net/@id30919" target="_blank" class="social-btn">
