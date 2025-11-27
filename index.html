@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>😽AI卡比貓的奇幻旅程</title>
     
-    <!-- 引入 EmailJS SDK (已填入你的 Public Key) -->
+    <!-- 引入 EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
@@ -36,45 +36,43 @@
         .hero h1 { font-size: 2rem; color: #ff6b6b; margin-bottom: 10px; }
         
         section { padding: 30px 20px; max-width: 900px; margin: 0 auto; }
-        h2 { border-left: 5px solid #ff9a9e; padding-left: 10px; margin-bottom: 20px; color: #333; }
+        
+        /* 分類標題樣式 */
+        .category-title { 
+            border-left: 8px solid #ff9a9e; 
+            padding-left: 15px; 
+            margin: 40px 0 20px 0; 
+            color: #333; 
+            font-size: 1.8rem;
+            background: rgba(255,255,255,0.5);
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 0 10px 10px 0;
+        }
 
         /* --- 作品集通用卡片 --- */
         .project-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border: 1px solid #ffecec; }
-        .project-title { padding: 12px; background: #fff5f7; font-weight: bold; text-align: center; color: #d63384; }
-        iframe { width: 100%; height: 400px; border: none; display: block; }
+        .project-title { padding: 12px; background: #fff5f7; font-weight: bold; text-align: center; color: #d63384; font-size: 1.2rem; }
+        iframe { width: 100%; height: 500px; border: none; display: block; }
 
         /* --- 中央留言板樣式 --- */
-        .comment-section {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-        }
+        .comment-section { background: #fff; padding: 20px; border-radius: 10px; }
         .comment-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .input-group { display: flex; gap: 10px; }
         input, textarea, select { 
-            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; 
-            background: #fdfdfd;
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: #fdfdfd;
         }
-        /* 驗證碼區塊 */
-        .captcha-box {
-            display: flex; align-items: center; gap: 10px; background: #f0f0f0; padding: 10px; border-radius: 8px; font-weight: bold; color: #555;
-        }
+        .captcha-box { display: flex; align-items: center; gap: 10px; background: #f0f0f0; padding: 10px; border-radius: 8px; font-weight: bold; color: #555; }
         .captcha-input { width: 60px; text-align: center; }
 
-        button.submit-btn {
-            background-color: #ff9a9e; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s;
-        }
+        button.submit-btn { background-color: #ff9a9e; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s; }
         button.submit-btn:hover { background-color: #ff6b6b; }
         button.submit-btn:disabled { background-color: #ddd; cursor: not-allowed; }
 
-        /* 留言列表 */
         .comment-list { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #ddd; }
-        .single-comment { 
-            background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.95em; position: relative;
-        }
+        .single-comment { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.95em; position: relative; }
         .comment-header { font-weight: bold; color: #333; display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px;}
         
-        /* --- 頁尾 --- */
         footer { text-align: center; padding: 30px; color: #aaa; font-size: 0.9rem; }
     </style>
 </head>
@@ -82,9 +80,9 @@
 
     <header>
         <nav>
-            <a href="#portfolio">奇幻作品</a>
-            <a href="#notes">冒險筆記</a>
-            <a href="#contact">聯絡我</a>
+            <a href="#badminton">🏸 羽球程式</a>
+            <a href="#investment">💰 投資規劃</a>
+            <a href="#contact">留言板</a>
         </nav>
     </header>
 
@@ -93,68 +91,88 @@
         <p>歡迎來到我的程式魔法書，這裡記錄了每一次的冒險！</p>
     </div>
 
-    <!-- 區塊：作品集 -->
-    <section id="portfolio">
-        <h2>📂 奇幻作品集</h2>
-        
-        <!-- 作品 01 -->
+    <!-- ==========================
+         第一區：羽球程式系列
+    ========================== -->
+    <section id="badminton">
+        <h2 class="category-title">🏸 羽球程式系列</h2>
+
+        <!-- 作品 1: 羽球計分 (已改小寫) -->
         <div class="project-card">
-            <div class="project-title">Project 01：魔法傳送門 (測試網頁)</div>
-            <!-- ★ 請確認你的 GitHub 裡有 project1.html -->
-            <iframe src="project1.html"></iframe> 
+            <div class="project-title">1. 羽球計分板 (Badminton Score)</div>
+            <iframe src="badmintonscore.html"></iframe> 
         </div>
 
-        <!-- 作品 02 -->
+        <!-- 作品 2: 即時比分 (已改小寫) -->
         <div class="project-card">
-            <div class="project-title">Project 02：時光鐘塔 (數位時鐘)</div>
-            <!-- ★ 請確認你的 GitHub 裡有 clock.html -->
-            <iframe src="clock.html"></iframe> 
+            <div class="project-title">2. 即時比分看板 (Live Score)</div>
+            <iframe src="livescore.html"></iframe> 
         </div>
 
-        <!-- 作品 03 (Streamlit) -->
+        <!-- 作品 3: 賽事系統 (Streamlit) -->
         <div class="project-card">
-            <div class="project-title">Project 03：🏸 羽球賽事指揮官 (Python/Streamlit)</div>
-            <!-- 增加高度到 600px 並隱藏 Streamlit 選單 -->
+            <div class="project-title">3. 羽球賽事指揮官 (Python System)</div>
+            <!-- 加高高度並隱藏選單 -->
             <iframe src="https://id30919-badminton-app-eqzjbn.streamlit.app/?embed=true" style="height: 600px;"></iframe>
-            
-            <!-- 全螢幕按鈕 -->
             <div style="text-align:center; padding: 10px; background: #f9f9f9; border-top: 1px solid #eee;">
-                <p style="font-size: 0.9em; color: gray;">手機操作覺得擠嗎？</p>
                 <a href="https://id30919-badminton-app-eqzjbn.streamlit.app/" target="_blank" 
                    style="display:inline-block; margin-top:5px; text-decoration:none; background:#ff4b4b; color:white; padding:5px 15px; border-radius:5px; font-size:0.9em;">
                    📺 開啟全螢幕模式
                 </a>
             </div>
         </div>
-
     </section>
 
-    <!-- Coding 筆記 -->
-    <section id="notes">
-        <h2>📝 冒險筆記</h2>
-        <div style="background:white; padding:20px; border-radius:10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            <h3>今天學會了中央留言板</h3>
-            <p>原本每個作品都有一個留言區，維護太麻煩了。現在學會用 DRY 原則，把功能合併在一起，透過下拉選單來區分主題！</p>
+    <!-- ==========================
+         第二區：投資規劃系列
+    ========================== -->
+    <section id="investment">
+        <h2 class="category-title">💰 投資規劃系列</h2>
+
+        <!-- 作品 4: 複利計算 (已改小寫) -->
+        <div class="project-card">
+            <div class="project-title">4. 複利計算機 (Compound Interest)</div>
+            <iframe src="compound.html"></iframe> 
+        </div>
+
+        <!-- 作品 5: 勞保試算 (已改小寫) -->
+        <div class="project-card">
+            <div class="project-title">5. 勞保試算 (Labor Insurance)</div>
+            <iframe src="laborinsurance.html"></iframe> 
+        </div>
+
+        <!-- 作品 6: 個人資產 (已改小寫) -->
+        <div class="project-card">
+            <div class="project-title">6. 個人資產管理 (Personal Asset)</div>
+            <iframe src="personalasset.html"></iframe> 
         </div>
     </section>
 
-    <!-- 中央留言板區塊 -->
+    <!-- ==========================
+         中央留言板區塊
+    ========================== -->
     <section id="contact" style="background: white; margin-top: 40px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
         <h2 style="border-left: 5px solid #ff9a9e; padding-left: 10px;">📬 聯絡卡比貓 / 留言板</h2>
         <p style="color: gray; margin-bottom: 20px;">對哪個作品有興趣？或是單純想聊聊？歡迎在下面留言！</p>
 
         <div class="comment-section">
-            <!-- 留言列表顯示區 -->
             <div class="comment-list" id="main-list"></div>
             
             <div class="comment-form">
-                <!-- 下拉選單：讓使用者選擇主題 -->
                 <label style="font-weight: bold; color: #555;">你想針對哪個主題留言？</label>
-                <select id="project-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; background: #fff;">
+                <!-- 更新後的選單：包含所有 6 個作品 -->
+                <select id="project-select" style="margin-bottom: 15px;">
                     <option value="一般留言">👋 純粹打招呼</option>
-                    <option value="魔法傳送門">🔮 Project 01: 魔法傳送門</option>
-                    <option value="時光鐘塔">⏰ Project 02: 時光鐘塔</option>
-                    <option value="羽球賽事系統">🏸 Project 03: 羽球賽事系統</option>
+                    <optgroup label="🏸 羽球系列">
+                        <option value="羽球計分板">Project 1: 羽球計分板</option>
+                        <option value="即時比分看板">Project 2: 即時比分看板</option>
+                        <option value="羽球賽事系統">Project 3: 羽球賽事系統</option>
+                    </optgroup>
+                    <optgroup label="💰 投資系列">
+                        <option value="複利計算機">Project 4: 複利計算機</option>
+                        <option value="勞保試算">Project 5: 勞保試算</option>
+                        <option value="個人資產管理">Project 6: 個人資產管理</option>
+                    </optgroup>
                 </select>
 
                 <div class="input-group">
@@ -164,7 +182,6 @@
                 
                 <textarea id="user-msg" rows="4" placeholder="寫下你的想法..."></textarea>
                 
-                <!-- 驗證碼 -->
                 <div class="captcha-box">
                     <span id="captcha-q"></span>
                     <input type="number" id="captcha-a" class="captcha-input" placeholder="?">
@@ -175,21 +192,17 @@
         </div>
     </section>
 
-    <!-- 頁尾 -->
     <footer style="margin-top: 0;">
         © 2025 AI 卡比貓的奇幻旅程 | Created with HTML & Magic
     </footer>
 
-    <!-- ★★★ 魔法核心：單一留言板邏輯 (已填入你的 ID) ★★★ -->
+    <!-- JS 邏輯區 -->
     <script>
-        // 設定你的 EmailJS ID
         const serviceID = "service_aicopycat";
         const templateID = "template_aicopycat";
 
-        // 變數儲存正確答案
         let correctAnswer = 0;
 
-        // 初始化驗證碼
         function initCaptcha() {
             let num1 = Math.floor(Math.random() * 10) + 1;
             let num2 = Math.floor(Math.random() * 10) + 1;
@@ -197,12 +210,10 @@
             document.getElementById('captcha-q').innerText = `驗證：${num1} + ${num2} = ?`;
         }
 
-        // 網頁載入時啟動
         window.onload = function() {
             initCaptcha();
         };
 
-        // 送出留言
         function postComment() {
             let selectProject = document.getElementById('project-select').value;
             let name = document.getElementById('user-name').value;
@@ -211,19 +222,16 @@
             let userAnswer = document.getElementById('captcha-a').value;
             let btn = document.querySelector('.submit-btn');
 
-            // 檢查空值
             if(name === "" || msg === "" || email === "") {
                 alert("請填寫完整資訊 (暱稱、Email、內容) 😾");
                 return;
             }
 
-            // 檢查驗證碼
             if(parseInt(userAnswer) !== correctAnswer) {
                 alert("算術錯誤！機器人走開！🤖");
                 return;
             }
 
-            // --- 開始寄信 ---
             let originalText = btn.innerText;
             btn.innerText = "傳送中...";
             btn.disabled = true;
@@ -232,21 +240,19 @@
                 from_name: name,
                 from_email: email,
                 message: msg,
-                project_name: selectProject // 這裡直接抓選單的值
+                project_name: selectProject
             };
 
             emailjs.send(serviceID, templateID, params)
                 .then(function(response) {
                     alert("✅ 留言成功！通知信已寄出！");
                     
-                    // 顯示留言在畫面上
                     let list = document.getElementById('main-list');
                     let time = new Date().toLocaleString();
                     
-                    // 根據選擇的主題，顯示不同的標籤顏色
-                    let tagColor = "#2c3e50";
-                    if(selectProject.includes("羽球")) tagColor = "#ff4b4b";
-                    if(selectProject.includes("魔法")) tagColor = "#d63384";
+                    let tagColor = "#2c3e50"; // 預設顏色
+                    if(selectProject.includes("羽球") || selectProject.includes("比分")) tagColor = "#ff4b4b"; // 羽球紅
+                    if(selectProject.includes("複利") || selectProject.includes("勞保") || selectProject.includes("資產")) tagColor = "#28a745"; // 投資綠
 
                     list.innerHTML += `
                         <div class="single-comment">
@@ -258,7 +264,6 @@
                             <p style="font-size:0.8em; color:green; margin-top:5px;">(系統：已發信通知站長)</p>
                         </div>`;
 
-                    // 清空並重置
                     document.getElementById('user-msg').value = "";
                     document.getElementById('captcha-a').value = "";
                     initCaptcha();
