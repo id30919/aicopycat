@@ -21,7 +21,7 @@
         
         /* 導覽列 */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 改成比較科技感的漸層 */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 15px 0;
             position: sticky;
             top: 0;
@@ -49,14 +49,14 @@
             font-weight: 800;
         }
 
-        /* 作品卡片 (優化手機體驗) */
+        /* 作品卡片 */
         .project-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .project-title { padding: 15px; background: #f7fafc; font-weight: bold; text-align: center; color: #4a5568; border-bottom: 1px solid #edf2f7; font-size: 1.1rem; }
         
         /* iframe RWD 高度設定 */
         iframe { width: 100%; border: none; display: block; height: 500px; }
         @media (max-width: 600px) {
-            iframe { height: 400px; } /* 手機版稍微矮一點，避免滑不到盡頭 */
+            iframe { height: 400px; }
         }
 
         /* --- 聯絡我 & 投票區塊 --- */
@@ -69,26 +69,25 @@
             margin-top: 50px;
         }
 
-        /* 社群按鈕 */
+        /* 社群按鈕 (只剩下 Threads) */
         .social-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             margin: 10px;
-            padding: 12px 25px;
+            padding: 15px 30px; /* 按鈕加大 */
             color: white;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 1.1rem; /* 字體加大 */
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            width: 80%; /* 手機版按鈕寬一點 */
-            max-width: 300px;
+            width: 100%;
+            max-width: 350px;
+            background: #000; /* Threads 黑色 */
         }
-        .social-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
-        .btn-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-        .btn-threads { background: #000; }
+        .social-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); background: #333; }
 
         /* 排行榜樣式 */
         .leaderboard { margin-top: 40px; text-align: left; }
@@ -97,7 +96,7 @@
         .poll-bar { 
             position: absolute; left: 0; top: 0; bottom: 0; 
             background: rgba(102, 126, 234, 0.2); 
-            width: 0%; /* 初始長度 */
+            width: 0%;
             transition: width 1s ease-out; 
             z-index: 1;
         }
@@ -105,9 +104,9 @@
             background: #667eea; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; margin-left: 10px;
         }
         .vote-btn:hover { background: #5a67d8; }
-        .top-1 .poll-bar { background: rgba(255, 215, 0, 0.3); } /* 第一名金色 */
-        .top-2 .poll-bar { background: rgba(192, 192, 192, 0.3); } /* 第二名銀色 */
-        .top-3 .poll-bar { background: rgba(205, 127, 50, 0.3); } /* 第三名銅色 */
+        .top-1 .poll-bar { background: rgba(255, 215, 0, 0.3); } 
+        .top-2 .poll-bar { background: rgba(192, 192, 192, 0.3); } 
+        .top-3 .poll-bar { background: rgba(205, 127, 50, 0.3); }
 
         footer { text-align: center; padding: 40px 20px; color: #888; font-size: 0.9rem; }
     </style>
@@ -168,13 +167,12 @@
 
         <div class="project-card">
             <div class="project-title">5. 勞保試算 (Labor Insurance)</div>
-            <!-- ★★★ 關鍵修正：這裡配合你的檔名改成 laborInsurance.html ★★★ -->
+            <!-- 維持 laborinsurance.html 以符合你的 GitHub 檔名 -->
             <iframe src="laborinsurance.html"></iframe> 
         </div>
 
         <div class="project-card">
             <div class="project-title">6. 個人資產管理 (Personal Asset)</div>
-            <!-- ★★★ 這裡配合你的檔名改成 personalAsset.html (如果你的檔名是這樣) ★★★ -->
             <iframe src="personalasset.html"></iframe> 
         </div>
     </section>
@@ -187,14 +185,10 @@
             <h2 style="margin-bottom: 20px; color: #333;">📬 聯絡卡比貓</h2>
             <p style="color: #666; margin-bottom: 30px;">喜歡我的作品嗎？歡迎追蹤我的社群！</p>
             
-            <!-- 社群連結 ID30919 -->
+            <!-- 只保留 Threads 連結 -->
             <div>
-                <a href="https://www.instagram.com/id30919" target="_blank" class="social-btn btn-ig">
-                    📸 Instagram: id30919
-                </a>
-                <br>
-                <a href="https://www.threads.net/@id30919" target="_blank" class="social-btn btn-threads">
-                    🧵 Threads: id30919
+                <a href="https://www.threads.net/@id30919" target="_blank" class="social-btn">
+                    🗣️ Threads: id30919
                 </a>
             </div>
 
@@ -220,12 +214,11 @@
         const serviceID = "service_aicopycat";
         const templateID = "template_aicopycat";
 
-        // 模擬初始票數 (讓畫面不要都是0，看起來比較熱鬧)
-        // 注意：這只是前端顯示，重新整理網頁會重置 (因為沒有後端資料庫)
+        // 模擬初始票數
         let votes = [
             { id: 1, name: "羽球計分板", count: 12 },
             { id: 2, name: "即時比分看板", count: 8 },
-            { id: 3, name: "羽球賽事系統", count: 25 }, // 人氣最高
+            { id: 3, name: "羽球賽事系統", count: 25 }, 
             { id: 4, name: "複利計算機", count: 15 },
             { id: 5, name: "勞保試算", count: 10 },
             { id: 6, name: "個人資產管理", count: 18 }
@@ -233,13 +226,12 @@
 
         // 渲染排行榜
         function renderPoll() {
-            // 根據票數排序 (多到少)
             votes.sort((a, b) => b.count - a.count);
 
             const container = document.getElementById('poll-container');
-            container.innerHTML = ""; // 清空
+            container.innerHTML = ""; 
 
-            let maxVotes = votes[0].count; // 用最高票當作 100% 寬度基準
+            let maxVotes = votes[0].count; 
 
             votes.forEach((item, index) => {
                 let rankClass = "";
@@ -247,7 +239,6 @@
                 else if(index === 1) rankClass = "top-2";
                 else if(index === 2) rankClass = "top-3";
 
-                // 計算長度百分比
                 let widthPercent = (item.count / maxVotes) * 100;
 
                 let html = `
@@ -268,15 +259,13 @@
 
         // 投票功能
         function vote(id) {
-            // 1. 更新前端數字
             let target = votes.find(v => v.id === id);
             if(target) {
                 target.count++;
                 alert(`感謝你投給「${target.name}」！🎉`);
-                renderPoll(); // 重新排序並顯示
+                renderPoll(); 
             }
 
-            // 2. 寄送 Email 通知站長 (你)
             let params = {
                 from_name: "訪客投票",
                 from_email: "anonymous@vote.com",
@@ -292,7 +281,6 @@
                 });
         }
 
-        // 網頁載入時執行
         window.onload = function() {
             renderPoll();
         };
