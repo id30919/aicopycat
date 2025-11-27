@@ -38,20 +38,20 @@
         section { padding: 30px 20px; max-width: 900px; margin: 0 auto; }
         h2 { border-left: 5px solid #ff9a9e; padding-left: 10px; margin-bottom: 20px; color: #333; }
 
-        /* --- 作品集 --- */
+        /* --- 作品集通用卡片 --- */
         .project-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border: 1px solid #ffecec; }
         .project-title { padding: 12px; background: #fff5f7; font-weight: bold; text-align: center; color: #d63384; }
         iframe { width: 100%; height: 400px; border: none; display: block; }
 
-        /* --- 留言區塊樣式 --- */
+        /* --- 中央留言板樣式 --- */
         .comment-section {
             background: #fff;
             padding: 20px;
-            border-top: 1px dashed #ffcba4;
+            border-radius: 10px;
         }
         .comment-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .input-group { display: flex; gap: 10px; }
-        input, textarea { 
+        input, textarea, select { 
             width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; 
             background: #fdfdfd;
         }
@@ -68,14 +68,12 @@
         button.submit-btn:disabled { background-color: #ddd; cursor: not-allowed; }
 
         /* 留言列表 */
-        .comment-list { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+        .comment-list { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #ddd; }
         .single-comment { 
             background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.95em; position: relative;
         }
         .comment-header { font-weight: bold; color: #333; display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px;}
-        .comment-email { color: #999; font-size: 0.8em; font-weight: normal; }
-        .reply-tag { color: blue; cursor: pointer; font-size: 0.8em; }
-
+        
         /* --- 頁尾 --- */
         footer { text-align: center; padding: 30px; color: #aaa; font-size: 0.9rem; }
     </style>
@@ -86,7 +84,7 @@
         <nav>
             <a href="#portfolio">奇幻作品</a>
             <a href="#notes">冒險筆記</a>
-            <a href="#contact">召喚卡比貓</a>
+            <a href="#contact">聯絡我</a>
         </nav>
     </header>
 
@@ -102,56 +100,30 @@
         <!-- 作品 01 -->
         <div class="project-card">
             <div class="project-title">Project 01：魔法傳送門 (測試網頁)</div>
-            
-            <!-- ★ 請確認你的 GitHub 裡有 project1.html 這個檔案 -->
+            <!-- ★ 請確認你的 GitHub 裡有 project1.html -->
             <iframe src="project1.html"></iframe> 
-            
-            <div class="comment-section" id="comment-box-1">
-                <h4>💬 旅人留言板</h4>
-                <div class="comment-list" id="list-1"></div>
-                
-                <div class="comment-form">
-                    <div class="input-group">
-                        <input type="text" id="name-1" placeholder="你的暱稱" required>
-                        <input type="email" id="email-1" placeholder="Email (不會公開)" required>
-                    </div>
-                    <textarea id="msg-1" rows="3" placeholder="寫下你的冒險心得..."></textarea>
-                    
-                    <div class="captcha-box">
-                        <span id="captcha-q-1">1 + 1 = ?</span>
-                        <input type="number" id="captcha-a-1" class="captcha-input" placeholder="?">
-                    </div>
-
-                    <button class="submit-btn" onclick="postComment(1)">送出留言 🚀</button>
-                </div>
-            </div>
         </div>
 
         <!-- 作品 02 -->
         <div class="project-card">
             <div class="project-title">Project 02：時光鐘塔 (數位時鐘)</div>
-            
-            <!-- ★ 請確認你的 GitHub 裡有 clock.html 這個檔案 -->
+            <!-- ★ 請確認你的 GitHub 裡有 clock.html -->
             <iframe src="clock.html"></iframe> 
-            
-            <div class="comment-section" id="comment-box-2">
-                <h4>💬 旅人留言板</h4>
-                <div class="comment-list" id="list-2"></div>
-                
-                <div class="comment-form">
-                    <div class="input-group">
-                        <input type="text" id="name-2" placeholder="你的暱稱">
-                        <input type="email" id="email-2" placeholder="Email">
-                    </div>
-                    <textarea id="msg-2" rows="3" placeholder="寫下你的冒險心得..."></textarea>
-                    
-                    <div class="captcha-box">
-                        <span id="captcha-q-2"></span>
-                        <input type="number" id="captcha-a-2" class="captcha-input">
-                    </div>
+        </div>
 
-                    <button class="submit-btn" onclick="postComment(2)">送出留言 🚀</button>
-                </div>
+        <!-- 作品 03 (Streamlit) -->
+        <div class="project-card">
+            <div class="project-title">Project 03：🏸 羽球賽事指揮官 (Python/Streamlit)</div>
+            <!-- 增加高度到 600px 並隱藏 Streamlit 選單 -->
+            <iframe src="https://id30919-badminton-app-eqzjbn.streamlit.app/?embed=true" style="height: 600px;"></iframe>
+            
+            <!-- 全螢幕按鈕 -->
+            <div style="text-align:center; padding: 10px; background: #f9f9f9; border-top: 1px solid #eee;">
+                <p style="font-size: 0.9em; color: gray;">手機操作覺得擠嗎？</p>
+                <a href="https://id30919-badminton-app-eqzjbn.streamlit.app/" target="_blank" 
+                   style="display:inline-block; margin-top:5px; text-decoration:none; background:#ff4b4b; color:white; padding:5px 15px; border-radius:5px; font-size:0.9em;">
+                   📺 開啟全螢幕模式
+                </a>
             </div>
         </div>
 
@@ -160,52 +132,84 @@
     <!-- Coding 筆記 -->
     <section id="notes">
         <h2>📝 冒險筆記</h2>
-        <div style="background:white; padding:20px; border-radius:10px;">
-            <h3>今天學會了如何召喚 iframe</h3>
-            <p>原來網頁裡面可以包網頁，就像俄羅斯娃娃一樣神奇...</p>
-            <hr style="margin:10px 0; border:0; border-top:1px dashed #ddd;">
-            <p style="color:#888; font-size:0.9em;">(留言功能測試區)</p>
+        <div style="background:white; padding:20px; border-radius:10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <h3>今天學會了中央留言板</h3>
+            <p>原本每個作品都有一個留言區，維護太麻煩了。現在學會用 DRY 原則，把功能合併在一起，透過下拉選單來區分主題！</p>
+        </div>
+    </section>
+
+    <!-- 中央留言板區塊 -->
+    <section id="contact" style="background: white; margin-top: 40px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <h2 style="border-left: 5px solid #ff9a9e; padding-left: 10px;">📬 聯絡卡比貓 / 留言板</h2>
+        <p style="color: gray; margin-bottom: 20px;">對哪個作品有興趣？或是單純想聊聊？歡迎在下面留言！</p>
+
+        <div class="comment-section">
+            <!-- 留言列表顯示區 -->
+            <div class="comment-list" id="main-list"></div>
+            
+            <div class="comment-form">
+                <!-- 下拉選單：讓使用者選擇主題 -->
+                <label style="font-weight: bold; color: #555;">你想針對哪個主題留言？</label>
+                <select id="project-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; background: #fff;">
+                    <option value="一般留言">👋 純粹打招呼</option>
+                    <option value="魔法傳送門">🔮 Project 01: 魔法傳送門</option>
+                    <option value="時光鐘塔">⏰ Project 02: 時光鐘塔</option>
+                    <option value="羽球賽事系統">🏸 Project 03: 羽球賽事系統</option>
+                </select>
+
+                <div class="input-group">
+                    <input type="text" id="user-name" placeholder="你的暱稱" required>
+                    <input type="email" id="user-email" placeholder="Email (不會公開)" required>
+                </div>
+                
+                <textarea id="user-msg" rows="4" placeholder="寫下你的想法..."></textarea>
+                
+                <!-- 驗證碼 -->
+                <div class="captcha-box">
+                    <span id="captcha-q"></span>
+                    <input type="number" id="captcha-a" class="captcha-input" placeholder="?">
+                </div>
+
+                <button class="submit-btn" onclick="postComment()">送出留言 🚀</button>
+            </div>
         </div>
     </section>
 
     <!-- 頁尾 -->
-    <section id="contact">
-        <footer style="margin-top: 0;">
-            © 2025 AI 卡比貓的奇幻旅程 | Created with HTML & Magic
-        </footer>
-    </section>
+    <footer style="margin-top: 0;">
+        © 2025 AI 卡比貓的奇幻旅程 | Created with HTML & Magic
+    </footer>
 
-    <!-- ★★★ 魔法核心：寄信邏輯 (已填入你的 ID) ★★★ -->
+    <!-- ★★★ 魔法核心：單一留言板邏輯 (已填入你的 ID) ★★★ -->
     <script>
         // 設定你的 EmailJS ID
         const serviceID = "service_aicopycat";
         const templateID = "template_aicopycat";
 
-        // 儲存算術答案
-        let answers = {};
+        // 變數儲存正確答案
+        let correctAnswer = 0;
 
         // 初始化驗證碼
-        function initCaptcha(id) {
+        function initCaptcha() {
             let num1 = Math.floor(Math.random() * 10) + 1;
             let num2 = Math.floor(Math.random() * 10) + 1;
-            answers[id] = num1 + num2;
-            let qElement = document.getElementById('captcha-q-' + id);
-            if(qElement) qElement.innerText = `驗證：${num1} + ${num2} = ?`;
+            correctAnswer = num1 + num2;
+            document.getElementById('captcha-q').innerText = `驗證：${num1} + ${num2} = ?`;
         }
 
-        // 啟動驗證碼
+        // 網頁載入時啟動
         window.onload = function() {
-            initCaptcha(1);
-            initCaptcha(2);
+            initCaptcha();
         };
 
-        // 送出留言並寄信
-        function postComment(id) {
-            let name = document.getElementById('name-' + id).value;
-            let email = document.getElementById('email-' + id).value;
-            let msg = document.getElementById('msg-' + id).value;
-            let userAnswer = document.getElementById('captcha-a-' + id).value;
-            let btn = document.querySelector(`#comment-box-${id} button`); 
+        // 送出留言
+        function postComment() {
+            let selectProject = document.getElementById('project-select').value;
+            let name = document.getElementById('user-name').value;
+            let email = document.getElementById('user-email').value;
+            let msg = document.getElementById('user-msg').value;
+            let userAnswer = document.getElementById('captcha-a').value;
+            let btn = document.querySelector('.submit-btn');
 
             // 檢查空值
             if(name === "" || msg === "" || email === "") {
@@ -214,53 +218,55 @@
             }
 
             // 檢查驗證碼
-            if(parseInt(userAnswer) !== answers[id]) {
+            if(parseInt(userAnswer) !== correctAnswer) {
                 alert("算術錯誤！機器人走開！🤖");
                 return;
             }
 
-            // --- 開始寄信流程 ---
-            
-            // 1. 讓按鈕變色並顯示處理中
+            // --- 開始寄信 ---
             let originalText = btn.innerText;
             btn.innerText = "傳送中...";
-            btn.disabled = true; 
+            btn.disabled = true;
 
-            // 2. 準備要寄給 EmailJS 的資料
             let params = {
                 from_name: name,
                 from_email: email,
                 message: msg,
-                project_name: (id === 1) ? "魔法傳送門" : "時光鐘塔" // 這裡對應你的作品名稱
+                project_name: selectProject // 這裡直接抓選單的值
             };
 
-            // 3. 呼叫 EmailJS 寄信
             emailjs.send(serviceID, templateID, params)
                 .then(function(response) {
                     alert("✅ 留言成功！通知信已寄出！");
                     
                     // 顯示留言在畫面上
-                    let list = document.getElementById('list-' + id);
+                    let list = document.getElementById('main-list');
                     let time = new Date().toLocaleString();
+                    
+                    // 根據選擇的主題，顯示不同的標籤顏色
+                    let tagColor = "#2c3e50";
+                    if(selectProject.includes("羽球")) tagColor = "#ff4b4b";
+                    if(selectProject.includes("魔法")) tagColor = "#d63384";
+
                     list.innerHTML += `
                         <div class="single-comment">
                             <div class="comment-header">
-                                <span>${name}</span> <span style="font-size:0.8em; color:#aaa;">${time}</span>
+                                <span>${name} <span style="font-size:0.8em; background:${tagColor}; color:white; padding:2px 6px; border-radius:4px; margin-left:5px;">${selectProject}</span></span>
+                                <span style="font-size:0.8em; color:#aaa;">${time}</span>
                             </div>
                             <p>${msg}</p>
                             <p style="font-size:0.8em; color:green; margin-top:5px;">(系統：已發信通知站長)</p>
                         </div>`;
 
-                    // 清空輸入框
-                    document.getElementById('msg-' + id).value = "";
-                    document.getElementById('captcha-a-' + id).value = "";
-                    initCaptcha(id);
+                    // 清空並重置
+                    document.getElementById('user-msg').value = "";
+                    document.getElementById('captcha-a').value = "";
+                    initCaptcha();
 
                 }, function(error) {
                     alert("❌ 寄信失敗，請檢查網路。\n錯誤代碼：" + JSON.stringify(error));
                 })
                 .finally(function() {
-                    // 恢復按鈕
                     btn.innerText = originalText;
                     btn.disabled = false;
                 });
