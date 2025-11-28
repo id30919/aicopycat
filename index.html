@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>😻 AI卡比貓的奇幻旅程</title>
+    <title>😻AI卡比貓的奇幻旅程</title>
     
     <!-- 引入 EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -59,12 +59,34 @@
             iframe { height: 400px; }
         }
 
+        /* --- 系統傳送門按鈕樣式 (針對 Project 7) --- */
+        .portal-links {
+            padding: 20px;
+            background: #fdfdfd;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+        .portal-btn {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .btn-signup { background-color: #28a745; } /* 綠色 */
+        .btn-view { background-color: #17a2b8; }   /* 藍色 */
+        .btn-manager { background-color: #343a40; } /* 深灰 */
+        .portal-btn:hover { opacity: 0.8; transform: translateY(-2px); }
+
         /* --- 聯絡我 & 投票區塊 --- */
         .contact-box {
             background: white;
             padding: 30px 20px;
             border-radius: 15px;
-            text-align: center; /* 讓內容水平置中 */
+            text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             margin-top: 50px;
         }
@@ -127,21 +149,44 @@
     </div>
 
     <!-- ==========================
-         第一區：羽球程式系列
+         第一區：羽球程式系列 (最新)
+         排序：7 -> 3 -> 2 -> 1
     ========================== -->
     <section id="badminton">
         <h2 class="category-title">🏸 羽球程式系列</h2>
 
-        <div class="project-card">
-            <div class="project-title">1. 羽球計分板 (Badminton Score)</div>
-            <iframe src="badmintonscore.html"></iframe> 
+        <!-- 7. 大船羽球管理系統 (NEW! 置頂) -->
+        <div class="project-card" style="border: 2px solid #667eea;">
+            <div class="project-title" style="background: #eef2ff; color: #5a67d8;">
+                🔥 7. 大船羽球管理系統 (Full Stack System)
+            </div>
+            
+            <!-- 嵌入總覽頁 (入口) -->
+            <iframe src="https://badminton-signup-sys.web.app/" style="height: 600px;"></iframe>
+            
+            <!-- 快速傳送門按鈕 -->
+            <div class="portal-links">
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">👇 點擊下方按鈕快速切換功能 👇</p>
+                
+                <a href="https://badminton-signup-sys.web.app/home.html" target="_blank" class="portal-btn btn-signup">
+                    📝 進入報名頁
+                </a>
+
+                <a href="https://badminton-signup-sys.web.app/view.html" target="_blank" class="portal-btn btn-view">
+                    👀 查看即時名單
+                </a>
+
+                <a href="https://badminton-signup-sys.web.app/manager.html" target="_blank" class="portal-btn btn-manager">
+                    🔧 管理員後台
+                </a>
+                
+                <div style="font-size: 0.8rem; color: #888; margin-top: 5px;">
+                    (後台測試密碼：0000 或 4266)
+                </div>
+            </div>
         </div>
 
-        <div class="project-card">
-            <div class="project-title">2. 即時比分看板 (Live Score)</div>
-            <iframe src="livescore.html"></iframe> 
-        </div>
-
+        <!-- 3. 羽球賽事系統 -->
         <div class="project-card">
             <div class="project-title">3. 羽球賽事指揮官 (Python System)</div>
             <iframe src="https://id30919-badminton-app-eqzjbn.streamlit.app/?embed=true" style="height: 600px;"></iframe>
@@ -152,28 +197,43 @@
                 </a>
             </div>
         </div>
+
+        <!-- 2. 即時比分 -->
+        <div class="project-card">
+            <div class="project-title">2. 即時比分看板 (Live Score)</div>
+            <iframe src="livescore.html"></iframe> 
+        </div>
+
+        <!-- 1. 羽球計分 -->
+        <div class="project-card">
+            <div class="project-title">1. 羽球計分板 (Badminton Score)</div>
+            <iframe src="badmintonscore.html"></iframe> 
+        </div>
     </section>
 
     <!-- ==========================
          第二區：投資規劃系列
+         排序：6 -> 5 -> 4
     ========================== -->
     <section id="investment">
         <h2 class="category-title">💰 投資規劃系列</h2>
 
-        <div class="project-card">
-            <div class="project-title">4. 複利計算機 (Compound Interest)</div>
-            <iframe src="compound.html"></iframe> 
-        </div>
-
-        <div class="project-card">
-            <div class="project-title">5. 勞保試算 (Labor Insurance)</div>
-            <!-- 維持 laborinsurance.html 以符合你的 GitHub 檔名 -->
-            <iframe src="laborinsurance.html"></iframe> 
-        </div>
-
+        <!-- 6. 個人資產 -->
         <div class="project-card">
             <div class="project-title">6. 個人資產管理 (Personal Asset)</div>
             <iframe src="personalasset.html"></iframe> 
+        </div>
+
+        <!-- 5. 勞保試算 -->
+        <div class="project-card">
+            <div class="project-title">5. 勞保試算 (Labor Insurance)</div>
+            <iframe src="laborinsurance.html"></iframe> 
+        </div>
+
+        <!-- 4. 複利計算 -->
+        <div class="project-card">
+            <div class="project-title">4. 複利計算機 (Compound Interest)</div>
+            <iframe src="compound.html"></iframe> 
         </div>
     </section>
 
@@ -184,16 +244,13 @@
         <div class="contact-box">
             <h2 style="margin-bottom: 0px; color: #333;">📬 關於卡比貓</h2>
             
-            <!-- ★★★ 修改處：文字置中區塊 ★★★ -->
-            <!-- display: inline-block 讓這個區塊的寬度剛好包住文字 -->
-            <!-- text-align: left 讓文字在區塊內靠左對齊 -->
-            <!-- margin: 20px 0 30px 0 分別設定 上、右、下、左 的間距 -->
+            <!-- 文字置中區塊 -->
             <div style="display: inline-block; text-align: left; margin: 25px 0 35px 0; color: #555; line-height: 1.8; max-width: 100%;">
                 本人文組畢，從沒學過coding，英文也很破…我可以 你們絕對也行！<br>
                 如果順利產出自己的新作品，記得回來跟我分享 😋 一起來Coding吧！🤩
             </div>
 
-            <!-- 只保留 Threads 連結 -->
+            <!-- Only Threads -->
             <div>
                 <a href="https://www.threads.net/@id30919" target="_blank" class="social-btn">
                     🗣️ Threads: id30919
@@ -207,7 +264,7 @@
             <p style="color: #888; text-align: left; font-size: 0.9rem;">你最喜歡哪一個作品？點擊按鈕投我一票！</p>
             
             <div class="leaderboard" id="poll-container">
-                <!-- 這裡的內容會由 JavaScript 自動生成 -->
+                <!-- Javascript will render poll here -->
             </div>
         </div>
     </section>
@@ -222,8 +279,9 @@
         const serviceID = "service_aicopycat";
         const templateID = "template_aicopycat";
 
-        // 模擬初始票數
+        // 模擬初始票數 (新增了大船羽球系統)
         let votes = [
+            { id: 7, name: "大船羽球管理系統", count: 30 }, // 新作品人氣最高
             { id: 1, name: "羽球計分板", count: 12 },
             { id: 2, name: "即時比分看板", count: 8 },
             { id: 3, name: "羽球賽事系統", count: 25 }, 
