@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏸 大船羽球季打規劃與人數財務分析 💰</title>
+    <!-- 引入 Chart.js 及 datalabels 插件 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        body { font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 1400px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
+        h1 { color: #007bff; text-align: center; border-bottom: 3px solid #007bff; padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { border-left: 6px solid #ffc107; padding-left: 12px; color: #333; margin-top: 30px; margin-bottom: 20px; font-size: 1.5em; }
+        
+        /* 輸入區塊 */
+        .dynamic-inputs, .analysis-section { padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; background-color: #fff; }
+        
+        /* 季度與全壘打輸入樣式 */
+        .input-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 1.1em; font-weight: bold; }
+        .period-input { width: 250px !important; text-align: left; padding: 6px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; font-size: 1em; }
+        .fullhit-input { width: 80px !important; text-align: center; padding: 6px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; font-size: 1em; color: #000; font-weight: bold; }
+
+        /* 表格設定 - 無格線，內容置中，標題不換行 */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; table-layout: fixed; }
+        
+        th { 
+            background-color: #e9ecef; color: #495057; font-weight: bold; 
+            padding: 12px 5px; 
+            border: none; 
+            white-space: nowrap; 
+            overflow: hidden;
+        }
+
+        /* 針對特定長標題縮小字體以維持單行 */
+        #result-table th:nth-child(5), /* 季打總場次 */
+        #result-table th:nth-child(7), /* 每場零打價 */
+        #result-table th:nth-child(9)  /* 每場季打價 */
+        {
+            font-size: 0.85em; 
+        }
+
+        td { 
+            border: none; 
+            padding: 10px 5px; 
+            text-align: center !important; /* 內容強制置中 */
+            word-wrap: break-word; 
+            vertical-align: middle; 
+        }
+        
+        /* 一般輸入框 */
+        input[type="number"], input[type="text"] { width: 90%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 1em; }
+        
+        /* 按鈕 */
+        .button { background-color: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; margin-top: 15px; transition: 0.2s; }
+        .button:hover { background-color: #218838; }
+        
+        /* 文字區 */
+        textarea { width: 100%; height: 250px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: monospace; line-height: 1.4; }
+        
+        /* 分析結果區 */
+        .analysis-dashboard { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+        .chart-card { flex: 1; min-width: 400px; background: #f8f9fa; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .chart-wrapper { height: 400px; position: relative; }
+        
+        /* 總結數據卡片 */
+        .summary-stats { display: flex; gap: 20px; margin-bottom: 20px; }
+        .stat-box { flex: 1; padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: center; border: 1px solid #e9ecef; }
+        .stat-title { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .stat-value { font-size: 1.4em; font-weight: bold; }
+        .pos { color: #28a745; }
+        .neg { color: #dc3545; }
+        .neu { color: #007bff; }
+        .cnt { color: #6f42c1; }
+
+        /* AI 建議區塊 */
+        .ai-verdict-box { background-color: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .ai-title { font-weight: bold; color: #0d47a1; margin-bottom: 5px; display: block; }
+
+        /* 組合優惠特殊樣式 */
+        .small-text { font-size: 0.85em; } /* 縮小長文字 */
+        .combo-name { text-align: left !important; padding-left: 15px !important; font-weight: bold; }
+        .combo-val { text-align: center !important; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏸 大船羽球季打規劃與人數財務分析 💰</h1>
+
+    <!-- 1. 季打計畫輸入 -->
+    <div class="dynamic-inputs">
+        <h2>🗓️ 季度季打計畫</h2>
+        <div class="input-row">
+            季度名稱/期間：<input type="text" id="period-input" value="2026 第一季 (1-3月)" class="period-input">
+        </div>
+        
+        <table id="input-table">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">週次</th>
+                    <th style="width: 12%;">打球時間</th>
+                    <th style="width: 7%;">場地</th>
+                    <th style="width: 7%;">場次</th>
+                    <th style="width: 15%;">不開團日期</th>
+                    <th style="width: 8%;">零打費</th>
+                    <th style="width: 8%;">季打費</th>
+                    <th style="width: 10%;">備註</th>
+                </tr>
+            </thead>
+            <tbody id="input-body">
+                <tr data-key="mon"><td>週一</td><td>20:30-22:30</td><td>國小</td><td><input type="number" id="mon_total" value="12"></td><td><input type="text" id="mon_off" value="10/6 中秋節"></td><td><input type="number" id="mon_drop" value="250"></td><td><input type="number" id="mon_sea" value="210"></td><td><input type="text" value="請假不退費"></td></tr>
+                <tr data-key="tue2"><td>週二 (2h)</td><td>20:30-22:30</td><td>板橋</td><td><input type="number" id="tue2_total" value="13"></td><td><input type="text" id="tue2_off" value=""></td><td><input type="number" id="tue2_drop" value="250"></td><td><input type="number" id="tue2_sea" value="210"></td><td><input type="text" value="請假可補位"></td></tr>
+                <tr data-key="tue3"><td>週二 (3h)</td><td>20:30-23:30</td><td>板橋</td><td><input type="number" id="tue3_total" value="13"></td><td><input type="text" id="tue3_off" value=""></td><td><input type="number" id="tue3_drop" value="370"></td><td><input type="number" id="tue3_sea" value="310"></td><td><input type="text" value="請假可補位"></td></tr>
+                <tr data-key="thu"><td>週四</td><td>20:30-23:30</td><td>板橋</td><td><input type="number" id="thu_total" value="12"></td><td><input type="text" id="thu_off" value="12/25 耶誕節"></td><td><input type="number" id="thu_drop" value="370"></td><td><input type="number" id="thu_sea" value="310"></td><td><input type="text" value="請假不退費"></td></tr>
+            </tbody>
+        </table>
+        
+        <div class="input-row">
+            全壘打優惠：<input type="number" id="fullhit-discount" value="870" class="fullhit-input">
+        </div>
+        
+        <button class="button" onclick="generateTable()">📝 生成表格</button>
+    </div>
+
+    <!-- 2. 表格輸出區 -->
+    <div id="output-area" style="display:none;">
+        <h2 id="table-title">📊 季打費用及優惠方案</h2>
+        <table id="result-table">
+            <thead>
+                <tr>
+                    <th style="width: 4%;">#</th>
+                    <th style="width: 8%;">週次/時段</th>
+                    <th style="width: 9%;">打球時間</th>
+                    <th style="width: 5%;">時數</th>
+                    <th style="width: 5%;">季打<br>總場次</th>
+                    <th style="width: 10%;">不開團日期</th>
+                    <th style="width: 6%;">每場<br>零打價</th>
+                    <th style="width: 7%;">零打原價</th>
+                    <th style="width: 7%;">每場<br>季打價</th>
+                    <th style="width: 7%;">季打優惠</th>
+                    <th style="width: 5%;">折數</th>
+                    <th style="width: 8%;">備註</th>
+                </tr>
+            </thead>
+            <tbody id="result-body"></tbody>
+            <tfoot id="result-foot"></tfoot>
+        </table>
+    </div>
+
+    <!-- 3. 收支分析輸入 -->
+    <div class="analysis-section">
+        <h2>📑 季度收支與零打人數分析</h2>
+        <p>請貼上收支明細 (格式：日期 金額 備註)：</p>
+        <textarea id="expense-data" placeholder="範例：&#10;8月31日	-36000	國語實小場地費用&#10;10月7日	11100	週二3小時零打（30人）"></textarea>
+        <button class="button" onclick="analyzeData()">🚀 執行收支分析與預估</button>
+    </div>
+
+    <!-- 4. 分析圖表區 -->
+    <div id="analysis-dashboard" style="display:none;">
+        <div class="summary-stats">
+            <div class="stat-box"><div class="stat-title">總收入</div><div id="val-inc" class="stat-value neu">0</div></div>
+            <div class="stat-box"><div class="stat-title">總支出</div><div id="val-exp" class="stat-value neg">0</div></div>
+            <div class="stat-box"><div class="stat-title">總結餘</div><div id="val-net" class="stat-value">0</div></div>
+            <div class="stat-box"><div class="stat-title">總零打人數</div><div id="val-hc" class="stat-value cnt">0</div></div>
+        </div>
+
+        <div class="ai-verdict-box">
+            <span class="ai-title">🤖 AI 營運建議與總結：</span>
+            <span id="ai-verdict-text">等待分析數據...</span>
+        </div>
+
+        <div class="analysis-dashboard">
+            <!-- 圓餅圖：支出 -->
+            <div class="chart-card">
+                <h4>💸 核心支出佔比</h4>
+                <div class="chart-wrapper">
+                    <canvas id="chart-expense"></canvas>
+                </div>
+            </div>
+            <!-- 圓餅圖：收入 -->
+            <div class="chart-card">
+                <h4>💰 收入來源佔比</h4>
+                <div class="chart-wrapper">
+                    <canvas id="chart-income"></canvas>
+                </div>
+            </div>
+            <!-- 長條圖：人數分析 -->
+            <div class="chart-card" style="min-width: 100%;">
+                <h4>👥 各週次零打人數統計 (時段堆疊)</h4>
+                <div class="chart-wrapper">
+                    <canvas id="chart-headcount"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Chart.register(ChartDataLabels);
+
+    // --- 1. 生成表格邏輯 ---
+    function generateTable() {
+        const period = document.getElementById('period-input').value;
+        document.getElementById('table-title').textContent = `${period} 季打費用及優惠方案`;
+        
+        const fullHitVal = parseInt(document.getElementById('fullhit-discount').value) || 0;
+        const tbody = document.getElementById('result-body');
+        const tfoot = document.getElementById('result-foot');
+        tbody.innerHTML = '';
+        tfoot.innerHTML = '';
+
+        // 定義週次與底色
+        const inputs = [
+            { id: 'mon', name: '週一', time: '20:30-22:30', hrs: '2小時', color: '#e4dfec' }, 
+            { id: 'tue2', name: '週二 (2h)', time: '20:30-22:30', hrs: '2小時', color: '#eef7e6' }, 
+            { id: 'tue3', name: '週二 (3h)', time: '20:30-23:30', hrs: '3小時', color: '#eef7e6' },
+            { id: 'thu', name: '週四', time: '20:30-23:30', hrs: '3小時', color: '#B3E5FC' } 
+        ];
+
+        let idx = 1;
+        inputs.forEach(row => {
+            const total = parseInt(document.getElementById(`${row.id}_total`).value) || 0;
+            const drop = parseInt(document.getElementById(`${row.id}_drop`).value) || 0;
+            const seaPer = parseInt(document.getElementById(`${row.id}_sea`).value) || 0;
+            const off = document.getElementById(`${row.id}_off`).value;
+            const note = document.querySelector(`tr[data-key="${row.id}"] td:last-child input`).value;
+
+            const originalTotal = total * drop;
+            const seasonTotal = total * seaPer;
+            const discount = originalTotal > 0 ? Math.round((seasonTotal / originalTotal) * 100) + '折' : '-';
+
+            const tr = document.createElement('tr');
+            tr.style.backgroundColor = row.color; 
+            tr.innerHTML = `
+                <td>${idx++}</td>
+                <td>${row.name}</td>
+                <td>${row.time}</td>
+                <td>${row.hrs}</td>
+                <td>${total}</td>
+                <td>${off}</td>
+                <td>${drop}</td>
+                <td>${originalTotal.toLocaleString()}</td>
+                <td>${seaPer}</td>
+                <td>${seasonTotal.toLocaleString()}</td>
+                <td>${discount}</td>
+                <td>${note}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // 組合優惠區塊 (加入白色分隔列)
+        const footHTML = `
+            <tr style="height: 20px;">
+                <td colspan="12" style="border:none; background: #fff;"></td>
+            </tr>
+            <tr>
+                <td colspan="7" style="background:transparent;"></td>
+                <td colspan="3" style="background-color: #fff3cd; font-weight: bold; text-align: center;">組合優惠</td>
+                <td colspan="2" style="background-color: #fff3cd;"></td>
+            </tr>
+            <tr>
+                <td colspan="7" style="background:transparent;"></td>
+                <td colspan="3" style="background-color: #f7f3e8;" class="combo-name small-text">2 個任意組合</td>
+                <td colspan="2" style="background-color: #f7f3e8;" class="combo-val">- 200</td>
+            </tr>
+            <tr>
+                <td colspan="7" style="background:transparent;"></td>
+                <td colspan="3" style="background-color: #f7f3e8;" class="combo-name small-text">全壘打優惠 (週一、週二 3h、週四)</td>
+                <td colspan="2" style="background-color: #f7f3e8;" class="combo-val">- ${fullHitVal}</td>
+            </tr>
+            <tr>
+                <td colspan="7" style="background:transparent;"></td>
+                <td colspan="3" style="background-color: #f7f3e8;" class="combo-name small-text">在學學生優惠 (可與上述優惠合併使用)</td>
+                <td colspan="2" style="background-color: #f7f3e8;" class="combo-val">- 100</td>
+            </tr>
+            <!-- 新增底部大空行分隔 -->
+            <tr style="height: 40px;">
+                <td colspan="12" style="border:none; background: #fff;"></td>
+            </tr>
+        `;
+        tfoot.innerHTML = footHTML;
+        document.getElementById('output-area').style.display = 'block';
+    }
+
+    // --- 2. 收支與人數分析邏輯 ---
+    let charts = {};
+
+    function analyzeData() {
+        const text = document.getElementById('expense-data').value.trim();
+        const lines = text.split('\n');
+        
+        let income = { season: 0, mon: 0, tue: 0, thu: 0, sat: 0, other: 0 };
+        let expense = { venue: 0, ball: 0, other: 0 };
+        let hc = { 
+            '週一': 0, 
+            '週二 2h': 0, '週二 3h': 0, 
+            '週四': 0, 
+            '週六 2h': 0, '週六 3h': 0, '週六 4h': 0 
+        };
+        
+        lines.forEach(line => {
+            const parts = line.split(/\s+/);
+            if (parts.length < 2) return;
+            const amtStr = parts[1].replace(/,/g, '');
+            const amount = parseFloat(amtStr);
+            if (isNaN(amount)) return;
+            
+            const desc = parts.slice(2).join(' '); 
+
+            if (amount > 0) {
+                if (desc.includes('季打')) income.season += amount;
+                else if (desc.includes('週一')) income.mon += amount;
+                else if (desc.includes('週二')) income.tue += amount;
+                else if (desc.includes('週四')) income.thu += amount;
+                else if (desc.includes('週六')) income.sat += amount;
+                else income.other += amount;
+
+                const match = desc.match(/(\d+)人/);
+                if (match) {
+                    const count = parseInt(match[1]);
+                    if (desc.includes('週一')) hc['週一'] += count;
+                    else if (desc.includes('週四')) hc['週四'] += count;
+                    else if (desc.includes('週二')) {
+                        if (desc.includes('2小時')) hc['週二 2h'] += count;
+                        else hc['週二 3h'] += count;
+                    }
+                    else if (desc.includes('週六')) {
+                        if (desc.includes('4小時')) hc['週六 4h'] += count;
+                        else if (desc.includes('2小時')) hc['週六 2h'] += count;
+                        else hc['週六 3h'] += count;
+                    }
+                }
+            } else {
+                const absAmt = Math.abs(amount);
+                if (desc.includes('場地')) expense.venue += absAmt;
+                else if (desc.includes('羽毛球') || desc.includes('ACE') || desc.includes('勝利') || desc.includes('球錢')) expense.ball += absAmt;
+                else expense.other += absAmt;
+            }
+        });
+
+        // 財務統計
+        const totalInc = Object.values(income).reduce((a,b)=>a+b,0);
+        const totalExp = Object.values(expense).reduce((a,b)=>a+b,0);
+        const net = totalInc - totalExp;
+        const totalHc = Object.values(hc).reduce((a,b)=>a+b,0);
+
+        document.getElementById('val-inc').textContent = totalInc.toLocaleString();
+        document.getElementById('val-exp').textContent = '-' + totalExp.toLocaleString();
+        const netEl = document.getElementById('val-net');
+        netEl.textContent = net.toLocaleString();
+        netEl.className = 'stat-value ' + (net >= 0 ? 'pos' : 'neg');
+        document.getElementById('val-hc').textContent = totalHc.toLocaleString() + ' 人次';
+
+        // AI 結語
+        let advice = "";
+        if (net > 30000) {
+            advice = "🎉 **本季營運狀況極佳！** 盈餘相當充裕，建議可考慮回饋球友（舉辦比賽或聚餐），或預購下一季羽球以鎖定成本。";
+        } else if (net > 0) {
+            advice = "✅ **本季營運狀況穩健。** 收支平衡且略有盈餘，請持續維持零打人數的穩定性。";
+        } else if (net > -20000) {
+            advice = "⚠️ **本季出現小幅虧損。** 建議檢視雜項支出，並加強推廣特定冷門時段的零打報名。";
+        } else {
+            advice = "🚨 **本季面臨虧損壓力！** 建議檢討季打/零打定價策略，或嚴格控管用球與場地租用時數。";
+        }
+        document.getElementById('ai-verdict-text').innerHTML = advice;
+
+        document.getElementById('analysis-dashboard').style.display = 'block';
+        renderCharts(expense, income, hc);
+    }
+
+    function renderCharts(expense, income, hc) {
+        ['chart-expense', 'chart-income', 'chart-headcount'].forEach(id => {
+            if (charts[id]) { charts[id].destroy(); }
+        });
+
+        const pieOpts = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right' },
+                datalabels: {
+                    color: '#333', font: { weight: 'bold', size: 12 },
+                    textShadowBlur: 0,
+                    backgroundColor: 'rgba(255,255,255,0.7)',
+                    borderRadius: 4,
+                    padding: 4,
+                    display: 'auto',
+                    formatter: (val, ctx) => {
+                        const label = ctx.chart.data.labels[ctx.dataIndex];
+                        const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+                        const pct = Math.round(val*100/total) + '%';
+                        return `${label}\n$${val.toLocaleString()}\n${pct}`;
+                    }
+                }
+            },
+            layout: { padding: 20 }
+        };
+
+        // 1. 支出 (改色: 場地藍, 球費綠, 雜項淺灰)
+        charts['chart-expense'] = new Chart(document.getElementById('chart-expense'), {
+            type: 'pie',
+            data: {
+                labels: ['場地費', '球費', '雜項'],
+                datasets: [{ 
+                    data: [expense.venue, expense.ball, expense.other], 
+                    backgroundColor: ['#B3E5FC', '#E8F5E9', '#F5F5F5'], 
+                    borderColor: '#ccc',
+                    borderWidth: 1
+                }]
+            },
+            options: pieOpts
+        });
+
+        // 2. 收入
+        charts['chart-income'] = new Chart(document.getElementById('chart-income'), {
+            type: 'pie',
+            data: {
+                labels: ['季打', '週一', '週二', '週四', '週六', '其他'],
+                datasets: [{ 
+                    data: [income.season, income.mon, income.tue, income.thu, income.sat, income.other], 
+                    backgroundColor: ['#FFC107', '#FCE4EC', '#E8F5E9', '#B3E5FC', '#FFF3E0', '#9E9E9E'],
+                    borderColor: '#ccc',
+                    borderWidth: 1
+                }]
+            },
+            options: pieOpts
+        });
+
+        // 3. 人數 (堆疊長條圖 - 修正順序)
+        charts['chart-headcount'] = new Chart(document.getElementById('chart-headcount'), {
+            type: 'bar',
+            data: {
+                labels: ['週一', '週二', '週四', '週六'],
+                datasets: [
+                    { label: '週一', data: [hc['週一'], 0, 0, 0], backgroundColor: '#F06292', stack: 'main' }, // 粉紅深
+                    { label: '週四', data: [0, 0, hc['週四'], 0], backgroundColor: '#4FC3F7', stack: 'main' }, // 藍深
+                    { label: '週二 3h', data: [0, hc['週二 3h'], 0, 0], backgroundColor: '#66BB6A', stack: 'main' }, // 綠深
+                    { label: '週六 4h', data: [0, 0, 0, hc['週六 4h']], backgroundColor: '#FF9800', stack: 'main' }, // 橘深
+                    { label: '週六 3h', data: [0, 0, 0, hc['週六 3h']], backgroundColor: '#FFB74D', stack: 'main' }, // 橘中
+                    { label: '週二 2h', data: [0, hc['週二 2h'], 0, 0], backgroundColor: '#C8E6C9', stack: 'main' }, // 綠淺
+                    { label: '週六 2h', data: [0, 0, 0, hc['週六 2h']], backgroundColor: '#FFE0B2', stack: 'main' }  // 橘淺
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }, 
+                    datalabels: {
+                        color: '#333', font: { weight: 'bold' },
+                        formatter: v => v > 0 ? v : ''
+                    }
+                },
+                scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
