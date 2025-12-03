@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI卡比貓的奇幻旅程</title>
+    <title>😻AI卡比貓的奇幻旅程</title>
     
-        <!-- ★★★ Favicon 改成這行 ★★★ -->
+    <!-- 設定 Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😻</text></svg>">
 
     <!-- 引入 EmailJS SDK -->
@@ -79,9 +79,9 @@
             font-size: 0.9rem;
             transition: 0.2s;
         }
-        .btn-signup { background-color: #28a745; } /* 綠色 */
-        .btn-view { background-color: #17a2b8; }   /* 藍色 */
-        .btn-manager { background-color: #343a40; } /* 深灰 */
+        .btn-signup { background-color: #28a745; } 
+        .btn-view { background-color: #17a2b8; }   
+        .btn-manager { background-color: #343a40; } 
         .portal-btn:hover { opacity: 0.8; transform: translateY(-2px); }
 
         /* --- 聯絡我 & 投票區塊 --- */
@@ -147,68 +147,58 @@
     </header>
 
     <div class="hero">
-        <h1> AI 卡比貓的奇幻旅程</h1>
+        <h1>😻 AI 卡比貓的奇幻旅程</h1>
         <p>Badminton & Investment Portfolio</p>
     </div>
 
     <!-- ==========================
-         第一區：羽球程式系列 (最新)
-         排序：7 -> 6 -> 5 -> 4
+         第一區：羽球程式系列 (最新，置頂)
+         排序：8 -> 7 -> 3 -> 2 -> 1
     ========================== -->
     <section id="badminton">
         <h2 class="category-title">🏸 羽球程式系列</h2>
 
-        <!-- 8. 季打規劃分析 (NEW! 置頂) -->
+        <!-- 8. 季打規劃與財務分析 (NEW! 置頂) -->
         <div class="project-card">
-            <div class="project-title">8. 季打規劃與財務分析 (Season Planner)</div>
-            <!-- 這個工具比較長，建議高度設為 800px 以完整顯示圖表 -->
+            <div class="project-title" style="background: #eef2ff; color: #5a67d8;">
+                🌟 8. 季打規劃與財務分析 (Season Planner)
+            </div>
+            <!-- 檔案名稱為 badmintonplanner.html，高度加大 -->
             <iframe src="badmintonplanner.html" style="height: 800px;"></iframe> 
         </div>
-        
-       <!-- 7. 大船羽球管理系統 (Full Stack System) -->
-        <div class="project-card" style="border: 2px solid #667eea; border-radius: 10px; overflow: hidden; background: white; margin-bottom: 30px;">
-            <div class="project-title" style="background: #eef2ff; color: #5a67d8; padding: 15px; font-weight: bold; border-bottom: 1px solid #e0e7ff;">
+
+        <!-- 7. 大船羽球管理系統 -->
+        <div class="project-card" style="border: 2px solid #667eea;">
+            <div class="project-title" style="background: #eef2ff; color: #5a67d8;">
                 🔥 7. 大船羽球管理系統 (Full Stack System)
             </div>
             
-            <!-- 系統展示區 (圖片取代 iframe) -->
-            <div style="text-align: center; padding: 30px; background: #f8f9fa;">
-                <!-- 這裡的 src="images/demo.jpg" 是指你專案資料夾下的圖片 -->
-                <!-- 如果你還沒上傳圖片，暫時會顯示破圖，請看下方的教學上傳 -->
-                <a href="https://liff.line.me/2008582161-oBn2QBGq" target="_blank">
-                    <img src="images/demo.jpg" 
-                         alt="大船羽球系統手機畫面" 
-                         style="max-width: 300px; width: 100%; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 4px solid #333; transition: transform 0.3s;">
-                </a>
-                
-                <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">
-                    👆 點擊圖片或下方按鈕開啟系統
-                </p>
-            </div>
+            <iframe src="https://badminton-signup-sys.web.app/" style="height: 600px;"></iframe>
             
-            <!-- 快速傳送門按鈕 -->
-            <div class="portal-links" style="padding: 20px; text-align: center; background: white; border-top: 1px solid #eee;">
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">👇 選擇身分進入 👇</p>
+            <div class="portal-links">
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">👇 點擊下方按鈕快速切換功能 👇</p>
                 
-                <!-- 1. 球友報名入口 (使用 LIFF 連結體驗最佳) -->
-                <a href="https://liff.line.me/2008582161-oBn2QBGq" target="_blank" style="display:inline-block; margin:5px; padding:10px 20px; background:#00B900; color:white; text-decoration:none; border-radius:30px; font-weight:bold; box-shadow: 0 4px 6px rgba(0,185,0,0.2);">
-                    📝 我要報名 (LINE)
+                <a href="https://badminton-signup-sys.web.app/home.html" target="_blank" class="portal-btn btn-signup">
+                    📝 進入報名頁
                 </a>
 
-                <!-- 2. 管理員後台 (使用 Firebase Hosting 連結) -->
-                <a href="https://badminton-signup-sys.web.app/manager.html" target="_blank" style="display:inline-block; margin:5px; padding:10px 20px; background:#4a5568; color:white; text-decoration:none; border-radius:30px; font-weight:bold; box-shadow: 0 4px 6px rgba(74,85,104,0.2);">
+                <a href="https://badminton-signup-sys.web.app/view.html" target="_blank" class="portal-btn btn-view">
+                    👀 查看即時名單
+                </a>
+
+                <a href="https://badminton-signup-sys.web.app/manager.html" target="_blank" class="portal-btn btn-manager">
                     🔧 管理員後台
                 </a>
                 
-                <div style="font-size: 0.8rem; color: #888; margin-top: 15px;">
-                    (報名測試密碼：8888 後台不開放使用)
+                <div style="font-size: 0.8rem; color: #888; margin-top: 5px;">
+                    (後台測試密碼：0000 或 4266)
                 </div>
             </div>
         </div>
 
-        <!-- 6. 羽球賽事系統 -->
+        <!-- 3. 羽球賽事系統 -->
         <div class="project-card">
-            <div class="project-title">6. 羽球賽事指揮官 (Python System)</div>
+            <div class="project-title">3. 羽球賽事指揮官 (Python System)</div>
             <iframe src="https://id30919-badminton-app-eqzjbn.streamlit.app/?embed=true" style="height: 600px;"></iframe>
             <div style="text-align:center; padding: 15px; background: #f9f9f9; border-top: 1px solid #eee;">
                 <a href="https://id30919-badminton-app-eqzjbn.streamlit.app/" target="_blank" 
@@ -218,41 +208,41 @@
             </div>
         </div>
 
-        <!-- 5. 即時比分 -->
+        <!-- 2. 即時比分 -->
         <div class="project-card">
-            <div class="project-title">5. 即時比分看板 (Live Score)</div>
+            <div class="project-title">2. 即時比分看板 (Live Score)</div>
             <iframe src="livescore.html"></iframe> 
         </div>
 
-        <!-- 4. 羽球計分 -->
+        <!-- 1. 羽球計分 -->
         <div class="project-card">
-            <div class="project-title">4. 羽球計分板 (Badminton Score)</div>
+            <div class="project-title">1. 羽球計分板 (Badminton Score)</div>
             <iframe src="badmintonscore.html"></iframe> 
         </div>
     </section>
 
     <!-- ==========================
          第二區：投資規劃系列
-         排序：3 -> 2 -> 1
+         排序：6 -> 5 -> 4
     ========================== -->
     <section id="investment">
         <h2 class="category-title">💰 投資規劃系列</h2>
 
-        <!-- 3. 個人資產 -->
+        <!-- 6. 個人資產 -->
         <div class="project-card">
-            <div class="project-title">3. 個人資產管理 (Personal Asset)</div>
+            <div class="project-title">6. 個人資產管理 (Personal Asset)</div>
             <iframe src="personalasset.html"></iframe> 
         </div>
 
-        <!-- 2. 勞保試算 -->
+        <!-- 5. 勞保試算 -->
         <div class="project-card">
-            <div class="project-title">2. 勞保試算 (Labor Insurance)</div>
+            <div class="project-title">5. 勞保試算 (Labor Insurance)</div>
             <iframe src="laborinsurance.html"></iframe> 
         </div>
 
-        <!-- 1. 複利計算 -->
+        <!-- 4. 複利計算 -->
         <div class="project-card">
-            <div class="project-title">1. 複利計算機 (Compound Interest)</div>
+            <div class="project-title">4. 複利計算機 (Compound Interest)</div>
             <iframe src="compound.html"></iframe> 
         </div>
     </section>
@@ -299,9 +289,10 @@
         const serviceID = "service_aicopycat";
         const templateID = "template_aicopycat";
 
-        // 模擬初始票數 (新增了大船羽球系統)
+        // 模擬初始票數 (新增 Project 8)
         let votes = [
-            { id: 7, name: "大船羽球管理系統", count: 30 }, // 新作品人氣最高
+            { id: 8, name: "季打規劃與財務分析", count: 35 }, // NEW! 置頂
+            { id: 7, name: "大船羽球管理系統", count: 30 },
             { id: 1, name: "羽球計分板", count: 12 },
             { id: 2, name: "即時比分看板", count: 8 },
             { id: 3, name: "羽球賽事系統", count: 25 }, 
