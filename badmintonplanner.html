@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏸 大船羽球季打規劃與人數財務分析 💰</title>
+    <title>🏸 大船羽球季打規劃與行事曆分析 💰</title>
     <!-- 引入 Chart.js 及 datalabels 插件 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -14,41 +14,28 @@
         h2 { border-left: 6px solid #ffc107; padding-left: 12px; color: #333; margin-top: 30px; margin-bottom: 20px; font-size: 1.5em; }
         
         /* 輸入區塊 */
-        .dynamic-inputs, .analysis-section { padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; background-color: #fff; }
+        .dynamic-inputs, .analysis-section, .calendar-section { padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; background-color: #fff; }
         
-        /* 季度與全壘打輸入樣式 */
-        .input-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 1.1em; font-weight: bold; }
-        .period-input { width: 250px !important; text-align: left; padding: 6px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; font-size: 1em; }
-        .fullhit-input { width: 80px !important; text-align: center; padding: 6px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; font-size: 1em; color: #000; font-weight: bold; }
+        /* 1. 頂部輸入區樣式統一 */
+        .input-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 1.1em; font-weight: bold; white-space: nowrap; }
+        .period-input { 
+            width: 300px; text-align: left; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; font-size: 1em; color: #333;
+        }
+        .fullhit-input { 
+            width: 300px; text-align: left; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; font-size: 1em; color: #333; font-weight: normal;
+        }
 
-        /* 表格設定 - 無格線，內容置中，標題不換行 */
+        /* 表格設定 */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; table-layout: fixed; }
+        th, td { border: 1px solid #ccc; padding: 10px 5px; text-align: center; word-wrap: break-word; vertical-align: middle; }
+        th { background-color: #e9ecef; color: #495057; font-weight: bold; }
         
-        th { 
-            background-color: #e9ecef; color: #495057; font-weight: bold; 
-            padding: 12px 5px; 
-            border: none; 
-            white-space: nowrap; 
-            overflow: hidden;
-        }
-
-        /* 針對特定長標題縮小字體以維持單行 */
-        #result-table th:nth-child(5), /* 季打總場次 */
-        #result-table th:nth-child(7), /* 每場零打價 */
-        #result-table th:nth-child(9)  /* 每場季打價 */
-        {
-            font-size: 0.85em; 
-        }
-
-        td { 
-            border: none; 
-            padding: 10px 5px; 
-            text-align: center !important; /* 內容強制置中 */
-            word-wrap: break-word; 
-            vertical-align: middle; 
-        }
+        /* 強制不換行與置中 */
+        .nowrap { white-space: nowrap !important; }
+        .text-center { text-align: center !important; }
+        .text-left { text-align: left !important; padding-left: 10px !important; }
         
-        /* 一般輸入框 */
+        /* 輸入框 */
         input[type="number"], input[type="text"] { width: 90%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 1em; }
         
         /* 按鈕 */
@@ -61,9 +48,9 @@
         /* 分析結果區 */
         .analysis-dashboard { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
         .chart-card { flex: 1; min-width: 400px; background: #f8f9fa; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .chart-wrapper { height: 400px; position: relative; }
+        .chart-wrapper { height: 350px; position: relative; }
         
-        /* 總結數據卡片 */
+        /* 統計卡片 */
         .summary-stats { display: flex; gap: 20px; margin-bottom: 20px; }
         .stat-box { flex: 1; padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: center; border: 1px solid #e9ecef; }
         .stat-title { font-size: 0.9em; color: #666; margin-bottom: 5px; }
@@ -73,14 +60,58 @@
         .neu { color: #007bff; }
         .cnt { color: #6f42c1; }
 
-        /* AI 建議區塊 */
+        /* AI 建議 */
         .ai-verdict-box { background-color: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
         .ai-title { font-weight: bold; color: #0d47a1; margin-bottom: 5px; display: block; }
 
-        /* 組合優惠特殊樣式 */
-        .small-text { font-size: 0.85em; } /* 縮小長文字 */
-        .combo-name { text-align: left !important; padding-left: 15px !important; font-weight: bold; }
-        .combo-val { text-align: center !important; font-weight: bold; }
+        /* Footer 特殊區塊樣式 */
+        .off-date-box { 
+            text-align: left !important; 
+            vertical-align: top !important; 
+            padding: 15px !important; 
+            background-color: #FCE4EC !important; /* 粉紅色 */
+            border: 1px solid #ccc;
+        }
+        .off-date-title { 
+            font-weight: bold; 
+            color: #C2185B; 
+            display: block; 
+            margin-bottom: 10px; 
+            font-size: 1.1em; 
+            border-bottom: 2px solid #F48FB1; 
+            padding-bottom: 5px;
+        }
+        .off-date-content { line-height: 1.8; }
+        
+        .combo-header { background-color: #fff3cd !important; font-weight: bold; }
+        .combo-name { 
+            background-color: #f7f3e8 !important; 
+            font-weight: bold; 
+            text-align: left !important; 
+            padding-left: 15px !important; 
+            white-space: nowrap !important; /* 強制不換行 */
+        }
+        .combo-val { 
+            background-color: #f7f3e8 !important; 
+            font-weight: bold; 
+            text-align: center !important; 
+        }
+
+        /* 行事曆樣式 */
+        .calendar-title-main { text-align: center; margin-bottom: 20px; color: #333; }
+        .calendar-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .month-card { border: 1px solid #ddd; padding: 10px; border-radius: 8px; width: 300px; background: #fff; }
+        .month-title { text-align: center; font-weight: bold; margin-bottom: 10px; font-size: 1.2em; background: #007bff; color: white; padding: 5px; border-radius: 4px; }
+        .cal-table { width: 100%; text-align: center; font-size: 0.9em; table-layout: fixed; }
+        .cal-table th { background: white; color: #333; border-bottom: 1px solid #eee; padding: 2px; }
+        .cal-table td { padding: 8px 2px; border: none; cursor: default; }
+        
+        .day-play { background-color: #C8E6C9; color: #1B5E20; font-weight: bold; border-radius: 50%; } 
+        .day-off { background-color: #FFCDD2; color: #B71C1C; font-weight: bold; border-radius: 50%; text-decoration: line-through; }
+        .day-holiday { background-color: #E1BEE7; color: #4A148C; font-weight: bold; border-radius: 50%; border: 2px solid #9C27B0; }
+        .legend-box { margin-top: 10px; display: flex; gap: 15px; justify-content: center; font-size: 0.9em; }
+        .legend-item { display: flex; align-items: center; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -92,32 +123,35 @@
     <div class="dynamic-inputs">
         <h2>🗓️ 季度季打計畫</h2>
         <div class="input-row">
-            季度名稱/期間：<input type="text" id="period-input" value="2026 第一季 (1-3月)" class="period-input">
+            <label style="width: 140px;">季度名稱/期間：</label>
+            <input type="text" id="period-input" value="2026 第一季 (1-3月)" class="period-input">
         </div>
         
         <table id="input-table">
             <thead>
                 <tr>
                     <th style="width: 5%;">週次</th>
-                    <th style="width: 12%;">打球時間</th>
-                    <th style="width: 7%;">場地</th>
-                    <th style="width: 7%;">場次</th>
-                    <th style="width: 15%;">不開團日期</th>
+                    <th style="width: 10%;">打球時間</th>
+                    <th style="width: 6%;">場地</th>
+                    <th style="width: 6%;">場次</th>
+                    <th style="width: 12%;">不開團日期 (格式: M/D)</th>
                     <th style="width: 8%;">零打費</th>
                     <th style="width: 8%;">季打費</th>
                     <th style="width: 10%;">備註</th>
                 </tr>
             </thead>
             <tbody id="input-body">
-                <tr data-key="mon"><td>週一</td><td>20:30-22:30</td><td>國小</td><td><input type="number" id="mon_total" value="12"></td><td><input type="text" id="mon_off" value="10/6 中秋節"></td><td><input type="number" id="mon_drop" value="250"></td><td><input type="number" id="mon_sea" value="210"></td><td><input type="text" value="請假不退費"></td></tr>
-                <tr data-key="tue2"><td>週二 (2h)</td><td>20:30-22:30</td><td>板橋</td><td><input type="number" id="tue2_total" value="13"></td><td><input type="text" id="tue2_off" value=""></td><td><input type="number" id="tue2_drop" value="250"></td><td><input type="number" id="tue2_sea" value="210"></td><td><input type="text" value="請假可補位"></td></tr>
-                <tr data-key="tue3"><td>週二 (3h)</td><td>20:30-23:30</td><td>板橋</td><td><input type="number" id="tue3_total" value="13"></td><td><input type="text" id="tue3_off" value=""></td><td><input type="number" id="tue3_drop" value="370"></td><td><input type="number" id="tue3_sea" value="310"></td><td><input type="text" value="請假可補位"></td></tr>
-                <tr data-key="thu"><td>週四</td><td>20:30-23:30</td><td>板橋</td><td><input type="number" id="thu_total" value="12"></td><td><input type="text" id="thu_off" value="12/25 耶誕節"></td><td><input type="number" id="thu_drop" value="370"></td><td><input type="number" id="thu_sea" value="310"></td><td><input type="text" value="請假不退費"></td></tr>
+                <tr data-key="mon"><td>週一</td><td>20:30-22:30</td><td>國小</td><td><input type="number" id="mon_total" value="12"></td><td><input type="text" id="mon_off" value="1/1、2/16"></td><td><input type="number" id="mon_drop" value="250"></td><td><input type="number" id="mon_sea" value="210"></td><td><input type="text" value="請假不退費"></td></tr>
+                <tr data-key="tue2"><td>週二 (2h)</td><td>20:30-22:30</td><td>板橋</td><td><input type="number" id="tue2_total" value="13"></td><td><input type="text" id="tue2_off" value="2/17"></td><td><input type="number" id="tue2_drop" value="250"></td><td><input type="number" id="tue2_sea" value="210"></td><td><input type="text" value="請假可補位"></td></tr>
+                <tr data-key="tue3"><td>週二 (3h)</td><td>20:30-23:30</td><td>板橋</td><td><input type="number" id="tue3_total" value="13"></td><td><input type="text" id="tue3_off" value="2/17"></td><td><input type="number" id="tue3_drop" value="370"></td><td><input type="number" id="tue3_sea" value="310"></td><td><input type="text" value="請假可補位"></td></tr>
+                <tr data-key="thu"><td>週四</td><td>20:30-23:30</td><td>板橋</td><td><input type="number" id="thu_total" value="12"></td><td><input type="text" id="thu_off" value="2/19"></td><td><input type="number" id="thu_drop" value="370"></td><td><input type="number" id="thu_sea" value="310"></td><td><input type="text" value="請假不退費"></td></tr>
+                <tr data-key="sat"><td>週六</td><td>14:00-18:00</td><td>板橋</td><td><input type="number" id="sat_total" value="10"></td><td><input type="text" id="sat_off" value="2/28"></td><td><input type="number" id="sat_drop" value="450"></td><td><input type="number" id="sat_sea" value="0" disabled style="background:#eee;"></td><td><input type="text" value="不開放季打"></td></tr>
             </tbody>
         </table>
         
         <div class="input-row">
-            全壘打優惠：<input type="number" id="fullhit-discount" value="870" class="fullhit-input">
+            <label style="width: 140px;">全壘打優惠：</label>
+            <input type="number" id="fullhit-discount" value="870" class="fullhit-input">
         </div>
         
         <button class="button" onclick="generateTable()">📝 生成表格</button>
@@ -129,16 +163,16 @@
         <table id="result-table">
             <thead>
                 <tr>
-                    <th style="width: 4%;">#</th>
+                    <th style="width: 3%;">#</th>
                     <th style="width: 8%;">週次/時段</th>
                     <th style="width: 9%;">打球時間</th>
                     <th style="width: 5%;">時數</th>
-                    <th style="width: 5%;">季打<br>總場次</th>
+                    <th style="width: 5%;" class="nowrap">季打<br>總場次</th>
                     <th style="width: 10%;">不開團日期</th>
-                    <th style="width: 6%;">每場<br>零打價</th>
-                    <th style="width: 7%;">零打原價</th>
-                    <th style="width: 7%;">每場<br>季打價</th>
-                    <th style="width: 7%;">季打優惠</th>
+                    <th style="width: 6%;" class="nowrap">每場<br>零打價</th>
+                    <th style="width: 7%;" class="nowrap">零打原價</th>
+                    <th style="width: 7%;" class="nowrap">每場<br>季打價</th>
+                    <th style="width: 7%;" class="nowrap">季打優惠</th>
                     <th style="width: 5%;">折數</th>
                     <th style="width: 8%;">備註</th>
                 </tr>
@@ -146,6 +180,17 @@
             <tbody id="result-body"></tbody>
             <tfoot id="result-foot"></tfoot>
         </table>
+    </div>
+
+    <!-- 行事曆區塊 -->
+    <div id="calendar-area" class="calendar-section" style="display:none;">
+        <h2 class="calendar-title-main">📅 2026 第一季打球行事曆</h2>
+        <div class="legend-box">
+            <div class="legend-item"><span class="dot" style="background:#C8E6C9;"></span>打球日</div>
+            <div class="legend-item"><span class="dot" style="background:#FFCDD2;"></span>停打/請假</div>
+            <div class="legend-item"><span class="dot" style="background:#E1BEE7; border:1px solid #9C27B0;"></span>國定假日</div>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
     </div>
 
     <!-- 3. 收支分析輸入 -->
@@ -171,26 +216,17 @@
         </div>
 
         <div class="analysis-dashboard">
-            <!-- 圓餅圖：支出 -->
             <div class="chart-card">
                 <h4>💸 核心支出佔比</h4>
-                <div class="chart-wrapper">
-                    <canvas id="chart-expense"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="chart-expense"></canvas></div>
             </div>
-            <!-- 圓餅圖：收入 -->
             <div class="chart-card">
                 <h4>💰 收入來源佔比</h4>
-                <div class="chart-wrapper">
-                    <canvas id="chart-income"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="chart-income"></canvas></div>
             </div>
-            <!-- 長條圖：人數分析 -->
             <div class="chart-card" style="min-width: 100%;">
                 <h4>👥 各週次零打人數統計 (時段堆疊)</h4>
-                <div class="chart-wrapper">
-                    <canvas id="chart-headcount"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="chart-headcount"></canvas></div>
             </div>
         </div>
     </div>
@@ -199,10 +235,10 @@
 <script>
     Chart.register(ChartDataLabels);
 
-    // --- 1. 生成表格邏輯 ---
+    // --- 1. 生成表格與行事曆 ---
     function generateTable() {
-        const period = document.getElementById('period-input').value;
-        document.getElementById('table-title').textContent = `${period} 季打費用及優惠方案`;
+        const periodText = document.getElementById('period-input').value;
+        document.getElementById('table-title').textContent = `${periodText} 季打費用及優惠方案`;
         
         const fullHitVal = parseInt(document.getElementById('fullhit-discount').value) || 0;
         const tbody = document.getElementById('result-body');
@@ -210,77 +246,173 @@
         tbody.innerHTML = '';
         tfoot.innerHTML = '';
 
-        // 定義週次與底色
         const inputs = [
             { id: 'mon', name: '週一', time: '20:30-22:30', hrs: '2小時', color: '#e4dfec' }, 
             { id: 'tue2', name: '週二 (2h)', time: '20:30-22:30', hrs: '2小時', color: '#eef7e6' }, 
             { id: 'tue3', name: '週二 (3h)', time: '20:30-23:30', hrs: '3小時', color: '#eef7e6' },
-            { id: 'thu', name: '週四', time: '20:30-23:30', hrs: '3小時', color: '#B3E5FC' } 
+            { id: 'thu', name: '週四', time: '20:30-23:30', hrs: '3小時', color: '#e4dfec' },
+            { id: 'sat', name: '週六', time: '14:00-18:00', hrs: '4小時', color: '#FFF3E0' }
         ];
+
+        let offDaysSummary = [];
+        let allOffDates = [];
 
         let idx = 1;
         inputs.forEach(row => {
             const total = parseInt(document.getElementById(`${row.id}_total`).value) || 0;
             const drop = parseInt(document.getElementById(`${row.id}_drop`).value) || 0;
-            const seaPer = parseInt(document.getElementById(`${row.id}_sea`).value) || 0;
+            const seaPerVal = document.getElementById(`${row.id}_sea`).value;
+            const seaPer = parseInt(seaPerVal) || 0;
             const off = document.getElementById(`${row.id}_off`).value;
             const note = document.querySelector(`tr[data-key="${row.id}"] td:last-child input`).value;
 
-            const originalTotal = total * drop;
-            const seasonTotal = total * seaPer;
-            const discount = originalTotal > 0 ? Math.round((seasonTotal / originalTotal) * 100) + '折' : '-';
+            if (off.trim() !== '') {
+                const cleanName = row.name.split(' ')[0]; 
+                const existingEntry = offDaysSummary.find(item => item.name.includes(cleanName) && item.date === off);
+                if (!existingEntry) {
+                    offDaysSummary.push({ name: cleanName, date: off });
+                }
+                const dates = off.match(/(\d+[\/.]\d+)/g);
+                if (dates) {
+                    allOffDates.push(...dates.map(d => d.replace('.', '/')));
+                }
+            }
+
+            let originalTotal = total * drop;
+            let seasonTotal = '-';
+            let discount = '-';
+            let seaPerDisplay = seaPer;
+
+            if (seaPer === 0) {
+                seaPerDisplay = '-';
+                originalTotal = '-'; 
+            } else {
+                seasonTotal = (total * seaPer).toLocaleString();
+                originalTotal = originalTotal.toLocaleString();
+                const rawOriginal = total * drop;
+                const rawSeason = total * seaPer;
+                discount = rawOriginal > 0 ? Math.round((rawSeason / rawOriginal) * 100) + '折' : '-';
+            }
 
             const tr = document.createElement('tr');
             tr.style.backgroundColor = row.color; 
             tr.innerHTML = `
-                <td>${idx++}</td>
-                <td>${row.name}</td>
-                <td>${row.time}</td>
-                <td>${row.hrs}</td>
-                <td>${total}</td>
-                <td>${off}</td>
-                <td>${drop}</td>
-                <td>${originalTotal.toLocaleString()}</td>
-                <td>${seaPer}</td>
-                <td>${seasonTotal.toLocaleString()}</td>
-                <td>${discount}</td>
-                <td>${note}</td>
+                <td class="text-center">${idx++}</td>
+                <td class="text-center">${row.name}</td>
+                <td class="text-center">${row.time}</td>
+                <td class="text-center">${row.hrs}</td>
+                <td class="text-center">${total}</td>
+                <td class="text-center nowr">${off}</td>
+                <td class="text-center">${drop}</td>
+                <td class="text-center">${originalTotal}</td>
+                <td class="text-center">${seaPerDisplay}</td>
+                <td class="text-center">${seasonTotal}</td>
+                <td class="text-center">${discount}</td>
+                <td class="text-center">${note}</td>
             `;
             tbody.appendChild(tr);
         });
 
-        // 組合優惠區塊 (加入白色分隔列)
+        // 整理不開團日期文字 (靠左對齊)
+        const offDaysHTML = offDaysSummary.map(item => `<div>${item.name}：${item.date}</div>`).join('');
+
+        // Footer 結構: 左(6) + 空(1) + 標題(4) + 金額(1) = 12
         const footHTML = `
             <tr style="height: 20px;">
                 <td colspan="12" style="border:none; background: #fff;"></td>
             </tr>
             <tr>
-                <td colspan="7" style="background:transparent;"></td>
-                <td colspan="3" style="background-color: #fff3cd; font-weight: bold; text-align: center;">組合優惠</td>
-                <td colspan="2" style="background-color: #fff3cd;"></td>
+                <td rowspan="4" colspan="6" class="off-date-box">
+                    <span class="off-date-title">${periodText} 不開團日期</span>
+                    <div class="off-date-content">${offDaysHTML}</div>
+                </td>
+                
+                <!-- 白色分隔 -->
+                <td rowspan="4" style="background-color: #fff; border: none;"></td>
+
+                <td colspan="5" class="combo-header">組合優惠</td>
             </tr>
             <tr>
-                <td colspan="7" style="background:transparent;"></td>
-                <td colspan="3" style="background-color: #f7f3e8;" class="combo-name small-text">2 個任意組合</td>
-                <td colspan="2" style="background-color: #f7f3e8;" class="combo-val">- 200</td>
+                <td colspan="4" class="combo-name">2 個任意組合</td>
+                <td class="combo-val">- 200</td>
             </tr>
             <tr>
-                <td colspan="7" style="background:transparent;"></td>
-                <td colspan="3" style="background-color: #f7f3e8;" class="combo-name small-text">全壘打優惠 (週一、週二 3h、週四)</td>
-                <td colspan="2" style="background-color: #f7f3e8;" class="combo-val">- ${fullHitVal}</td>
+                <td colspan="4" class="combo-name">全壘打優惠 (週一、週二 3h、週四)</td>
+                <td class="combo-val">- ${fullHitVal}</td>
             </tr>
             <tr>
-                <td colspan="7" style="background:transparent;"></td>
-                <td colspan="3" style="background-color: #f7f3e8;" class="combo-name small-text">在學學生優惠 (可與上述優惠合併使用)</td>
-                <td colspan="2" style="background-color: #f7f3e8;" class="combo-val">- 100</td>
+                <td colspan="4" class="combo-name">在學學生優惠 (可與上述優惠合併使用)</td>
+                <td class="combo-val">- 100</td>
             </tr>
-            <!-- 新增底部大空行分隔 -->
             <tr style="height: 40px;">
                 <td colspan="12" style="border:none; background: #fff;"></td>
             </tr>
         `;
         tfoot.innerHTML = footHTML;
         document.getElementById('output-area').style.display = 'block';
+
+        generateCalendar(allOffDates);
+    }
+
+    // --- 1.5 行事曆 (週一為第一天) ---
+    function generateCalendar(userOffDates) {
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+        document.getElementById('calendar-area').style.display = 'block';
+
+        const year = 2026;
+        const months = [0, 1, 2]; 
+        const holidays = ["1/1", "2/16", "2/17", "2/18", "2/19", "2/20", "2/28"];
+        const playDays = [1, 2, 4, 6]; // 1=Mon, 2=Tue, 4=Thu, 6=Sat
+
+        months.forEach(month => {
+            const date = new Date(year, month, 1);
+            const monthName = date.toLocaleString('default', { month: 'long' });
+            
+            const card = document.createElement('div');
+            card.className = 'month-card';
+            
+            // Header: Mon Tue Wed Thu Fri Sat Sun
+            let tableHtml = `<div class="month-title">${monthName} ${year}</div><table class="cal-table">
+                <thead><tr><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th></tr></thead><tbody><tr>`;
+            
+            // 計算空白 (週一為0)
+            // getDay(): Sun=0, Mon=1...Sat=6
+            // Target: Mon=0, Tue=1...Sun=6 -> Formula: (day + 6) % 7
+            let startDay = (date.getDay() + 6) % 7;
+
+            for (let i = 0; i < startDay; i++) {
+                tableHtml += `<td></td>`;
+            }
+
+            while (date.getMonth() === month) {
+                const day = date.getDay(); // 0=Sun
+                const adjustedDay = (day + 6) % 7; // 0=Mon, 6=Sun
+                const dateNum = date.getDate();
+                const dateStr = `${month + 1}/${dateNum}`;
+                
+                let cssClass = '';
+                
+                // 優先順序: 使用者停打(劃掉) > 國定假日 > 打球日
+                if (userOffDates.includes(dateStr)) {
+                    cssClass = 'day-off';
+                } else if (holidays.includes(dateStr)) {
+                    // 如果是國定假日且沒被使用者標註停打，算假日
+                    cssClass = 'day-holiday';
+                } else if (playDays.includes(day)) {
+                    cssClass = 'day-play';
+                }
+
+                tableHtml += `<td><div class="${cssClass}">${dateNum}</div></td>`;
+
+                if (adjustedDay === 6) tableHtml += `</tr><tr>`;
+                date.setDate(dateNum + 1);
+            }
+
+            tableHtml += `</tr></tbody></table>`;
+            card.innerHTML = tableHtml;
+            grid.appendChild(card);
+        });
     }
 
     // --- 2. 收支與人數分析邏輯 ---
@@ -292,12 +424,7 @@
         
         let income = { season: 0, mon: 0, tue: 0, thu: 0, sat: 0, other: 0 };
         let expense = { venue: 0, ball: 0, other: 0 };
-        let hc = { 
-            '週一': 0, 
-            '週二 2h': 0, '週二 3h': 0, 
-            '週四': 0, 
-            '週六 2h': 0, '週六 3h': 0, '週六 4h': 0 
-        };
+        let hc = { '週一': 0, '週二 2h': 0, '週二 3h': 0, '週四': 0, '週六 2h': 0, '週六 3h': 0, '週六 4h': 0 };
         
         lines.forEach(line => {
             const parts = line.split(/\s+/);
@@ -305,7 +432,6 @@
             const amtStr = parts[1].replace(/,/g, '');
             const amount = parseFloat(amtStr);
             if (isNaN(amount)) return;
-            
             const desc = parts.slice(2).join(' '); 
 
             if (amount > 0) {
@@ -339,7 +465,6 @@
             }
         });
 
-        // 財務統計
         const totalInc = Object.values(income).reduce((a,b)=>a+b,0);
         const totalExp = Object.values(expense).reduce((a,b)=>a+b,0);
         const net = totalInc - totalExp;
@@ -352,7 +477,6 @@
         netEl.className = 'stat-value ' + (net >= 0 ? 'pos' : 'neg');
         document.getElementById('val-hc').textContent = totalHc.toLocaleString() + ' 人次';
 
-        // AI 結語
         let advice = "";
         if (net > 30000) {
             advice = "🎉 **本季營運狀況極佳！** 盈餘相當充裕，建議可考慮回饋球友（舉辦比賽或聚餐），或預購下一季羽球以鎖定成本。";
@@ -387,59 +511,44 @@
                     padding: 4,
                     display: 'auto',
                     formatter: (val, ctx) => {
-                        const label = ctx.chart.data.labels[ctx.dataIndex];
                         const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
-                        const pct = Math.round(val*100/total) + '%';
-                        return `${label}\n$${val.toLocaleString()}\n${pct}`;
+                        return Math.round(val*100/total) + '%';
                     }
                 }
             },
             layout: { padding: 20 }
         };
 
-        // 1. 支出 (改色: 場地藍, 球費綠, 雜項淺灰)
         charts['chart-expense'] = new Chart(document.getElementById('chart-expense'), {
             type: 'pie',
             data: {
                 labels: ['場地費', '球費', '雜項'],
-                datasets: [{ 
-                    data: [expense.venue, expense.ball, expense.other], 
-                    backgroundColor: ['#B3E5FC', '#E8F5E9', '#F5F5F5'], 
-                    borderColor: '#ccc',
-                    borderWidth: 1
-                }]
+                datasets: [{ data: [expense.venue, expense.ball, expense.other], backgroundColor: ['#B3E5FC', '#E8F5E9', '#F5F5F5'], borderColor: '#ccc', borderWidth: 1 }]
             },
             options: pieOpts
         });
 
-        // 2. 收入
         charts['chart-income'] = new Chart(document.getElementById('chart-income'), {
             type: 'pie',
             data: {
                 labels: ['季打', '週一', '週二', '週四', '週六', '其他'],
-                datasets: [{ 
-                    data: [income.season, income.mon, income.tue, income.thu, income.sat, income.other], 
-                    backgroundColor: ['#FFC107', '#FCE4EC', '#E8F5E9', '#B3E5FC', '#FFF3E0', '#9E9E9E'],
-                    borderColor: '#ccc',
-                    borderWidth: 1
-                }]
+                datasets: [{ data: [income.season, income.mon, income.tue, income.thu, income.sat, income.other], backgroundColor: ['#FFC107', '#FCE4EC', '#E8F5E9', '#B3E5FC', '#FFF3E0', '#9E9E9E'], borderColor: '#ccc', borderWidth: 1 }]
             },
             options: pieOpts
         });
 
-        // 3. 人數 (堆疊長條圖 - 修正順序)
         charts['chart-headcount'] = new Chart(document.getElementById('chart-headcount'), {
             type: 'bar',
             data: {
                 labels: ['週一', '週二', '週四', '週六'],
                 datasets: [
-                    { label: '週一', data: [hc['週一'], 0, 0, 0], backgroundColor: '#F06292', stack: 'main' }, // 粉紅深
-                    { label: '週四', data: [0, 0, hc['週四'], 0], backgroundColor: '#4FC3F7', stack: 'main' }, // 藍深
-                    { label: '週二 3h', data: [0, hc['週二 3h'], 0, 0], backgroundColor: '#66BB6A', stack: 'main' }, // 綠深
-                    { label: '週六 4h', data: [0, 0, 0, hc['週六 4h']], backgroundColor: '#FF9800', stack: 'main' }, // 橘深
-                    { label: '週六 3h', data: [0, 0, 0, hc['週六 3h']], backgroundColor: '#FFB74D', stack: 'main' }, // 橘中
-                    { label: '週二 2h', data: [0, hc['週二 2h'], 0, 0], backgroundColor: '#C8E6C9', stack: 'main' }, // 綠淺
-                    { label: '週六 2h', data: [0, 0, 0, hc['週六 2h']], backgroundColor: '#FFE0B2', stack: 'main' }  // 橘淺
+                    { label: '週一', data: [hc['週一'], 0, 0, 0], backgroundColor: '#F06292', stack: 'main' },
+                    { label: '週四', data: [0, 0, hc['週四'], 0], backgroundColor: '#4FC3F7', stack: 'main' },
+                    { label: '週二 3h', data: [0, hc['週二 3h'], 0, 0], backgroundColor: '#66BB6A', stack: 'main' },
+                    { label: '週六 4h', data: [0, 0, 0, hc['週六 4h']], backgroundColor: '#FF9800', stack: 'main' },
+                    { label: '週六 3h', data: [0, 0, 0, hc['週六 3h']], backgroundColor: '#FFB74D', stack: 'main' },
+                    { label: '週二 2h', data: [0, hc['週二 2h'], 0, 0], backgroundColor: '#C8E6C9', stack: 'main' },
+                    { label: '週六 2h', data: [0, 0, 0, hc['週六 2h']], backgroundColor: '#FFE0B2', stack: 'main' }
                 ]
             },
             options: {
@@ -447,10 +556,7 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false }, 
-                    datalabels: {
-                        color: '#333', font: { weight: 'bold' },
-                        formatter: v => v > 0 ? v : ''
-                    }
+                    datalabels: { color: '#333', font: { weight: 'bold' }, formatter: v => v > 0 ? v : '' }
                 },
                 scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } }
             }
