@@ -2,115 +2,185 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🏸 大船羽球季打規劃與人數財務分析 💰</title>
-    <!-- 引入 Chart.js 及 datalabels 插件 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
-        body { font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }
-        .container { max-width: 1400px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
-        h1 { color: #007bff; text-align: center; border-bottom: 3px solid #007bff; padding-bottom: 10px; margin-bottom: 30px; }
+        body { font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif; margin: 0; padding: 10px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 1400px; margin: auto; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
+        h1 { color: #007bff; text-align: center; border-bottom: 3px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5em; }
         
-        /* 標題區塊調整 */
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 20px; border-left: 6px solid #ffc107; padding-left: 12px; }
-        .section-header h2 { margin: 0; border: none; padding: 0; font-size: 1.5em; color: #333; }
-        h2 { border-left: 6px solid #ffc107; padding-left: 12px; color: #333; margin-top: 30px; margin-bottom: 20px; font-size: 1.5em; }
+        /* 標題區塊 */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 15px; border-left: 6px solid #ffc107; padding-left: 12px; }
+        .section-header h2 { margin: 0; border: none; padding: 0; font-size: 1.3em; color: #333; }
+        h2 { border-left: 6px solid #ffc107; padding-left: 12px; color: #333; margin-top: 20px; margin-bottom: 15px; font-size: 1.3em; }
         
-        /* 表格樣式 */
-        #input-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; table-layout: fixed; }
-        #input-table th, #input-table td { border: 1px solid #ccc; padding: 10px 5px; text-align: center !important; vertical-align: middle !important; word-wrap: break-word; }
-        #input-table th { background-color: #e9ecef; color: #495057; font-weight: bold; }
-        #input-table input { text-align: center !important; width: 90%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
+        /* RWD 表格捲動 */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border: 1px solid #eee; }
 
-        #result-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; table-layout: fixed; }
-        #result-table th, #result-table td { border: 1px solid #ccc; padding: 10px 5px; text-align: center; word-wrap: break-word; vertical-align: middle; }
-        #result-table th { background-color: #e9ecef; color: #495057; font-weight: bold; }
+        /* 表格基本設定 */
+        #input-table, #result-table { width: 100%; border-collapse: collapse; font-size: 0.95em; table-layout: fixed; min-width: 900px; }
+        #input-table th, #input-table td, #result-table th, #result-table td { border: 1px solid #ccc; padding: 8px 4px; text-align: center !important; vertical-align: middle !important; word-wrap: break-word; }
+        #input-table th, #result-table th { background-color: #e9ecef; color: #495057; font-weight: bold; }
+        #input-table input { text-align: center !important; width: 90%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
         .nowrap-header { white-space: nowrap !important; }
         .text-center { text-align: center !important; }
         
-        /* (已移除) 季打優惠欄位黑色邊框樣式 */
+        /* =========================================
+           核心修改：底部資訊區塊樣式 (還原截圖)
+           ========================================= */
         
-        /* 資訊區塊 */
-        .left-info-box { text-align: left !important; vertical-align: top !important; padding: 15px 25px !important; background-color: #FCE4EC !important; border: 1px solid #ccc; }
-        .right-info-box-header { background-color: #FFF3E0 !important; text-align: left !important; vertical-align: top !important; padding: 15px 25px 0 25px !important; border-top: 1px solid #ccc !important; border-left: 1px solid #ccc !important; border-right: 1px solid #ccc !important; border-bottom: none !important; }
-        .right-info-box-body { background-color: #FFF3E0 !important; padding: 0 25px !important; border-left: 1px solid #ccc !important; border-right: 1px solid #ccc !important; border-top: none !important; border-bottom: none !important; }
-        .right-info-box-footer { background-color: #FFF3E0 !important; padding: 0 25px 15px 25px !important; border-left: 1px solid #ccc !important; border-right: 1px solid #ccc !important; border-top: none !important; border-bottom: 1px solid #ccc !important; }
-        .box-title { display: block; font-weight: bold; font-size: 1.1em; margin-bottom: 10px; padding-bottom: 8px; }
-        .title-pink { color: #C2185B; border-bottom: 2px solid #F48FB1; }
-        .title-orange { color: #E65100; border-bottom: 2px solid #FF9800; }
-        .combo-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: normal; font-size: 0.95em; color: #333; }
-        .off-date-content { line-height: 1.8; font-size: 0.95em; }
-
-        /* 輸入欄位列 */
-        .input-row { 
-            display: flex; 
-            align-items: center; 
-            margin-bottom: 15px; /* 與表格間距配合 */
-            font-size: 1.1em; 
-            font-weight: bold; 
-            white-space: nowrap; 
+        /* 1. 左側：不開團日期區塊 */
+        .left-info-box {
+            text-align: left !important;      /* 強制靠左 */
+            vertical-align: top !important;   /* 內容置頂 */
+            padding: 20px 30px !important;    /* 增加內距讓版面舒適 */
+            background-color: #FCE4EC !important; /* 粉紅底 */
+            border: 1px solid #ccc;
         }
+
+        /* 2. 右側：組合優惠區塊 (Header/Body/Footer) */
+        .right-info-box-header {
+            background-color: #FFF3E0 !important; /* 橘色底 */
+            text-align: left !important;      /* 強制靠左 */
+            vertical-align: top !important;
+            padding: 20px 30px 5px 30px !important; 
+            border-top: 1px solid #ccc !important;
+            border-left: 1px solid #ccc !important;
+            border-right: 1px solid #ccc !important;
+            border-bottom: none !important; 
+        }
+        .right-info-box-body {
+            background-color: #FFF3E0 !important;
+            padding: 0 30px !important;
+            border-left: 1px solid #ccc !important;
+            border-right: 1px solid #ccc !important;
+            border-top: none !important;
+            border-bottom: none !important;
+        }
+        .right-info-box-footer {
+            background-color: #FFF3E0 !important;
+            padding: 0 30px 20px 30px !important;
+            border-left: 1px solid #ccc !important;
+            border-right: 1px solid #ccc !important;
+            border-top: none !important;
+            border-bottom: 1px solid #ccc !important;
+        }
+
+        /* 3. 標題樣式 (含底線) */
+        .box-title {
+            display: block;
+            text-align: left !important; /* 標題文字靠左 */
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            width: 100%;
+        }
+        /* 粉紅標題線 */
+        .title-pink { 
+            color: #C2185B; 
+            border-bottom: 2px solid #F48FB1; /* 截圖中的粉紅橫線 */
+        }
+        /* 橘色標題線 */
+        .title-orange { 
+            color: #E65100; 
+            border-bottom: 2px solid #FF9800; /* 截圖中的橘色橫線 */
+        }
+
+        /* 4. 內容文字排版 */
+        .combo-row {
+            display: flex;
+            justify-content: space-between; /* 項目靠左，金額靠右 */
+            margin-bottom: 10px;
+            font-weight: normal;
+            font-size: 1em;
+            color: #333;
+        }
+        
+        .off-date-content {
+            text-align: left !important; /* 強制靠左 */
+            line-height: 1.8;
+            font-size: 1em;
+            color: #333;
+        }
+        /* 修正 ul li 的預設縮排 */
+        .off-date-content ul {
+            margin: 0;
+            padding-left: 0; /* 移除圓點縮排 */
+            list-style: none;
+        }
+        /* ========================================= */
+
+        /* 輸入與計算樣式 */
+        .input-row { display: flex; align-items: center; margin-bottom: 15px; font-size: 1.1em; font-weight: bold; white-space: nowrap; flex-wrap: wrap; }
         .period-input { width: 250px; text-align: center; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; font-size: 1em; color: #333; }
         
-        /* 全壘打與試算樣式 */
-        .fullhit-container {
-            margin-top: 30px;      /* 與上方表格距離 30px */
-            display: flex;         
-            align-items: center;   
-            flex-wrap: nowrap;     /* 強制不換行 */
-            gap: 15px;             
-            white-space: nowrap;   
-            overflow-x: auto;      
-        }
-
-        .fullhit-label { font-weight: bold; }
+        .fullhit-container { margin-top: 20px; display: flex; align-items: center; flex-wrap: nowrap; gap: 15px; white-space: nowrap; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
+        .fullhit-label { font-weight: bold; flex-shrink: 0; }
         .fullhit-input { width: 100px !important; text-align: center !important; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; color: #333; }
         
-        /* 試算方塊樣式 */
         .calc-info { font-size: 0.9em; color: #555; background: #f8f9fa; padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 1px 3px rgba(0,0,0,0.05); white-space: nowrap; }
         .calc-val { color: #d63384; font-weight: bold; margin-left: 5px; font-size: 1.1em; }
-        
-        /* 折扣後強調樣式 */
         .calc-info.highlight { background-color: #e8f5e9; border-color: #81c784; color: #1b5e20; }
         .calc-val.highlight { color: #2e7d32; }
 
-        .dynamic-inputs, .analysis-section, .calendar-section { padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; background-color: #fff; }
-        .button { background-color: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; margin-top: 15px; transition: 0.2s; }
+        .dynamic-inputs, .analysis-section, .calendar-section { padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; background-color: #fff; }
+        
+        /* 按鈕樣式 (強制不換行) */
+        .button { 
+            background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; margin-top: 10px; transition: 0.2s; 
+            width: auto; 
+            min-width: 250px;
+            white-space: nowrap; /* 關鍵 */
+            display: inline-block;
+        }
         .button:hover { background-color: #218838; }
-        .save-btn { background-color: #17a2b8; font-size: 0.95em; padding: 8px 16px; margin: 0; }
+        .save-btn { background-color: #17a2b8; font-size: 0.9em; padding: 6px 12px; margin: 0; width: auto; min-width: 0; }
         .save-btn:hover { background-color: #138496; }
-        textarea { width: 100%; height: 250px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: monospace; line-height: 1.4; }
+        textarea { width: 100%; height: 200px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: monospace; line-height: 1.4; box-sizing: border-box; }
         
         /* 行事曆 */
         .calendar-title-main { text-align: center; margin-bottom: 20px; color: #333; border-left: none !important; padding-left: 0 !important; }
-        .calendar-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-        .month-card { border: 1px solid #ddd; padding: 10px; border-radius: 8px; width: 300px; background: #fff; }
-        .month-title { text-align: center; font-weight: bold; margin-bottom: 10px; font-size: 1.2em; background: #007bff; color: white; padding: 5px; border-radius: 4px; }
+        .calendar-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .month-card { border: 1px solid #ddd; padding: 5px; border-radius: 8px; width: 100%; max-width: 320px; background: #fff; }
+        .month-title { text-align: center; font-weight: bold; margin-bottom: 5px; font-size: 1.1em; background: #007bff; color: white; padding: 5px; border-radius: 4px; }
         .cal-table { width: 100%; text-align: center; font-size: 0.9em; table-layout: fixed; }
         .cal-table th { background: white; color: #333; border-bottom: 1px solid #eee; padding: 2px; }
-        .cal-table td { padding: 8px 2px; border: none; cursor: default; }
-        .day-play { background-color: #C8E6C9; color: #1B5E20; font-weight: bold; border-radius: 50%; } 
-        .day-off { background-color: #FFCDD2; color: #B71C1C; font-weight: bold; border-radius: 50%; text-decoration: line-through; }
-        .day-holiday { background-color: #E1BEE7; color: #4A148C; font-weight: bold; border-radius: 50%; border: 2px solid #9C27B0; }
-        .legend-box { margin-top: 10px; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; font-size: 0.9em; }
+        .cal-table td { padding: 6px 2px; border: none; cursor: default; }
+        .day-play { background-color: #C8E6C9; color: #1B5E20; font-weight: bold; border-radius: 50%; width: 24px; height: 24px; line-height: 24px; margin: 0 auto; } 
+        .day-off { background-color: #FFCDD2; color: #B71C1C; font-weight: bold; border-radius: 50%; text-decoration: line-through; width: 24px; height: 24px; line-height: 24px; margin: 0 auto; }
+        .day-holiday { background-color: #E1BEE7; color: #4A148C; font-weight: bold; border-radius: 50%; border: 2px solid #9C27B0; width: 24px; height: 24px; line-height: 24px; margin: 0 auto; }
+        .legend-box { margin-top: 10px; margin-bottom: 20px; display: flex; gap: 10px; justify-content: center; font-size: 0.85em; flex-wrap: wrap; }
         .legend-item { display: flex; align-items: center; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; display: inline-block; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; display: inline-block; }
 
-        /* 圖表 */
-        .analysis-dashboard { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
-        .chart-card { flex: 1; min-width: 400px; background: #f8f9fa; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .chart-wrapper { height: 350px; position: relative; }
-        .summary-stats { display: flex; gap: 20px; margin-bottom: 20px; }
-        .stat-box { flex: 1; padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: center; border: 1px solid #e9ecef; }
-        .stat-title { font-size: 0.9em; color: #666; margin-bottom: 5px; }
-        .stat-value { font-size: 1.4em; font-weight: bold; }
+        /* 圖表與統計 */
+        .summary-stats { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-box { flex: 1 1 45%; padding: 10px; background: #f8f9fa; border-radius: 8px; text-align: center; border: 1px solid #e9ecef; }
+        .stat-title { font-size: 0.85em; color: #666; margin-bottom: 5px; }
+        .stat-value { font-size: 1.2em; font-weight: bold; }
         .pos { color: #28a745; }
         .neg { color: #dc3545; }
         .neu { color: #007bff; }
         .cnt { color: #6f42c1; }
-        .ai-verdict-box { background-color: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .ai-verdict-box { background-color: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin-bottom: 20px; border-radius: 4px; font-size: 0.95em; }
         .ai-title { font-weight: bold; color: #0d47a1; margin-bottom: 5px; display: block; }
+
+        .analysis-dashboard { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+        .chart-card { flex: 1 1 100%; background: #f8f9fa; border-radius: 10px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .chart-wrapper { height: 300px; position: relative; }
+
+        @media (max-width: 768px) {
+            .input-row { flex-direction: column; align-items: flex-start; }
+            .input-row label { margin-bottom: 5px; }
+            .period-input { margin-left: 0; width: 100%; box-sizing: border-box; }
+            .fullhit-container { justify-content: flex-start; padding-bottom: 15px; }
+            .summary-stats { gap: 8px; }
+            .stat-box { min-width: 45%; padding: 8px; }
+            .chart-wrapper { height: 250px; }
+        }
     </style>
 </head>
 <body>
@@ -126,41 +196,40 @@
         </div>
         
         <div class="input-row">
-            <label style="width: 140px;">季度名稱/期間：</label>
+            <label>季度名稱/期間：</label>
             <input type="text" id="period-input" value="2026 第一季 (1-3月)" class="period-input">
         </div>
         
-        <table id="input-table">
-            <thead>
-                <tr>
-                    <th style="width: 5%;">週次</th>
-                    <th style="width: 10%;">打球時間</th>
-                    <th style="width: 6%;">場地</th>
-                    <th style="width: 6%;">場次</th>
-                    <th style="width: 12%;">不開團日期</th>
-                    <th style="width: 8%;">零打費</th>
-                    <th style="width: 8%;">季打費</th>
-                    <th style="width: 10%;">備註</th>
-                </tr>
-            </thead>
-            <tbody id="input-body">
-                <tr data-key="mon"><td>週一</td><td>20:30-22:30</td><td><input type="text" id="mon_venue" value="國語實小"></td><td><input type="number" id="mon_total" value="12"></td><td><input type="text" id="mon_off" value="1/1、2/16"></td><td><input type="number" id="mon_drop" value="250"></td><td><input type="number" id="mon_sea" value="210"></td><td><input type="text" id="mon_note" value="請假不退費"></td></tr>
-                <tr data-key="tue2"><td>週二 (2h)</td><td>20:30-22:30</td><td><input type="text" id="tue2_venue" value="板橋羽球"></td><td><input type="number" id="tue2_total" value="13"></td><td><input type="text" id="tue2_off" value="2/17"></td><td><input type="number" id="tue2_drop" value="250"></td><td><input type="number" id="tue2_sea" value="210"></td><td><input type="text" id="tue2_note" value="請假可補位"></td></tr>
-                <tr data-key="tue3"><td>週二 (3h)</td><td>20:30-23:30</td><td><input type="text" id="tue3_venue" value="板橋羽球"></td><td><input type="number" id="tue3_total" value="13"></td><td><input type="text" id="tue3_off" value="2/17"></td><td><input type="number" id="tue3_drop" value="370"></td><td><input type="number" id="tue3_sea" value="310"></td><td><input type="text" id="tue3_note" value="請假可補位"></td></tr>
-                <tr data-key="thu"><td>週四</td><td>20:30-23:30</td><td><input type="text" id="thu_venue" value="板橋羽球"></td><td><input type="number" id="thu_total" value="12"></td><td><input type="text" id="thu_off" value="2/19"></td><td><input type="number" id="thu_drop" value="370"></td><td><input type="number" id="thu_sea" value="310"></td><td><input type="text" id="thu_note" value="請假不退費"></td></tr>
-                <tr data-key="sat"><td>週六</td><td>14:00-18:00</td><td><input type="text" id="sat_venue" value="板橋羽球"></td><td><input type="number" id="sat_total" value="10"></td><td><input type="text" id="sat_off" value="2/28"></td><td><input type="number" id="sat_drop" value="450"></td><td><input type="number" id="sat_sea" value="0" disabled style="background:#eee;"></td><td><input type="text" id="sat_note" value="不開放季打"></td></tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="input-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">週次</th>
+                        <th style="width: 110px;">打球時間</th>
+                        <th style="width: 80px;">場地</th>
+                        <th style="width: 60px;">場次</th>
+                        <th style="width: 120px;">不開團日期</th>
+                        <th style="width: 80px;">零打費</th>
+                        <th style="width: 80px;">季打費</th>
+                        <th style="width: 120px;">備註</th>
+                    </tr>
+                </thead>
+                <tbody id="input-body">
+                    <tr data-key="mon"><td>週一</td><td>20:30-22:30</td><td><input type="text" id="mon_venue" value="國語實小"></td><td><input type="number" id="mon_total" value="12"></td><td><input type="text" id="mon_off" value="1/1、2/16"></td><td><input type="number" id="mon_drop" value="250"></td><td><input type="number" id="mon_sea" value="210"></td><td><input type="text" id="mon_note" value="請假不退費"></td></tr>
+                    <tr data-key="tue2"><td>週二 (2h)</td><td>20:30-22:30</td><td><input type="text" id="tue2_venue" value="板橋羽球"></td><td><input type="number" id="tue2_total" value="13"></td><td><input type="text" id="tue2_off" value="2/17"></td><td><input type="number" id="tue2_drop" value="250"></td><td><input type="number" id="tue2_sea" value="210"></td><td><input type="text" id="tue2_note" value="請假可補位"></td></tr>
+                    <tr data-key="tue3"><td>週二 (3h)</td><td>20:30-23:30</td><td><input type="text" id="tue3_venue" value="板橋羽球"></td><td><input type="number" id="tue3_total" value="13"></td><td><input type="text" id="tue3_off" value="2/17"></td><td><input type="number" id="tue3_drop" value="370"></td><td><input type="number" id="tue3_sea" value="310"></td><td><input type="text" id="tue3_note" value="請假可補位"></td></tr>
+                    <tr data-key="thu"><td>週四</td><td>20:30-23:30</td><td><input type="text" id="thu_venue" value="板橋羽球"></td><td><input type="number" id="thu_total" value="12"></td><td><input type="text" id="thu_off" value="2/19"></td><td><input type="number" id="thu_drop" value="370"></td><td><input type="number" id="thu_sea" value="310"></td><td><input type="text" id="thu_note" value="請假不退費"></td></tr>
+                    <tr data-key="sat"><td>週六</td><td>14:00-18:00</td><td><input type="text" id="sat_venue" value="板橋羽球"></td><td><input type="number" id="sat_total" value="10"></td><td><input type="text" id="sat_off" value="2/28"></td><td><input type="number" id="sat_drop" value="450"></td><td><input type="number" id="sat_sea" value="0" disabled style="background:#eee;"></td><td><input type="text" id="sat_note" value="不開放季打"></td></tr>
+                </tbody>
+            </table>
+        </div>
         
-        <!-- 全壘打優惠區塊：透過 CSS 強制不換行 -->
         <div class="fullhit-container">
-            <!-- 1. 輸入框 -->
             <div style="display:flex; align-items:center;">
                 <span class="fullhit-label">全壘打優惠金額：</span>
                 <input type="number" id="fullhit-discount" value="870" class="fullhit-input">
             </div>
             
-            <!-- 2. 2H 組合 (原價 & 折扣後) -->
             <div style="display:flex; gap: 5px; align-items: center;">
                 <span class="calc-info">
                     (週一+二2h+四) 原價：<span id="calc-val-2h" class="calc-val">0</span>
@@ -170,7 +239,6 @@
                 </span>
             </div>
 
-            <!-- 3. 3H 組合 (原價 & 折扣後) -->
             <div style="display:flex; gap: 5px; align-items: center;">
                 <span class="calc-info">
                     (週一+二3h+四) 原價：<span id="calc-val-3h" class="calc-val">0</span>
@@ -187,26 +255,29 @@
     <!-- 2. 表格輸出區 -->
     <div id="output-area" style="display:none;">
         <h2 id="table-title">📊 季打費用及優惠方案</h2>
-        <table id="result-table">
-            <thead>
-                <tr>
-                    <th style="width: 3%;">#</th>
-                    <th style="width: 8%;">週次/時段</th>
-                    <th style="width: 9%;">打球時間</th>
-                    <th style="width: 5%;">時數</th>
-                    <th style="width: 5%;" class="nowrap-header">季打場數</th>
-                    <th style="width: 10%;">不開團日期</th>
-                    <th style="width: 6%;" class="nowrap-header">每場零打</th>
-                    <th style="width: 7%;" class="nowrap-header">零打原價</th>
-                    <th style="width: 7%;" class="nowrap-header">每場季打</th>
-                    <th style="width: 7%;" class="nowrap-header">季打優惠</th>
-                    <th style="width: 5%;">折數</th>
-                    <th style="width: 8%;">備註</th>
-                </tr>
-            </thead>
-            <tbody id="result-body"></tbody>
-            <tfoot id="result-foot"></tfoot>
-        </table>
+        
+        <div class="table-responsive">
+            <table id="result-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">#</th>
+                        <th style="width: 80px;">週次/時段</th>
+                        <th style="width: 90px;">打球時間</th>
+                        <th style="width: 50px;">時數</th>
+                        <th style="width: 70px;" class="nowrap-header">季打場數</th>
+                        <th style="width: 120px;">不開團日期</th>
+                        <th style="width: 70px;" class="nowrap-header">每場零打</th>
+                        <th style="width: 80px;" class="nowrap-header">零打原價</th>
+                        <th style="width: 80px;" class="nowrap-header">每場季打</th>
+                        <th style="width: 80px;" class="nowrap-header">季打優惠</th>
+                        <th style="width: 50px;">折數</th>
+                        <th style="width: 100px;">備註</th>
+                    </tr>
+                </thead>
+                <tbody id="result-body"></tbody>
+                <tfoot id="result-foot"></tfoot>
+            </table>
+        </div>
     </div>
 
     <!-- 行事曆區塊 -->
@@ -262,13 +333,8 @@
 <script>
     Chart.register(ChartDataLabels);
 
-    // --- 0. 設定與功能 ---
     function setupInputListeners() {
-        // 1. 週二連動
-        const syncPairs = [
-            ['tue2_total', 'tue3_total'], 
-            ['tue2_off', 'tue3_off']
-        ];
+        const syncPairs = [['tue2_total', 'tue3_total'], ['tue2_off', 'tue3_off']];
         syncPairs.forEach(pair => {
             const el1 = document.getElementById(pair[0]);
             const el2 = document.getElementById(pair[1]);
@@ -278,57 +344,35 @@
             }
         });
 
-        // 2. 全壘打試算連動：相關欄位變動即重算
-        const calcInputs = [
-            'mon_total', 'mon_sea',
-            'tue2_total', 'tue2_sea',
-            'tue3_total', 'tue3_sea',
-            'thu_total', 'thu_sea'
-        ];
+        const calcInputs = ['mon_total', 'mon_sea', 'tue2_total', 'tue2_sea', 'tue3_total', 'tue3_sea', 'thu_total', 'thu_sea'];
         calcInputs.forEach(id => {
             const el = document.getElementById(id);
-            if(el) {
-                el.addEventListener('input', calculateFullHitCost);
-            }
+            if(el) { el.addEventListener('input', calculateFullHitCost); }
         });
 
-        // 3. 優惠金額輸入框也要監聽
         const discountInput = document.getElementById('fullhit-discount');
-        if (discountInput) {
-            discountInput.addEventListener('input', calculateFullHitCost);
-        }
+        if (discountInput) { discountInput.addEventListener('input', calculateFullHitCost); }
     }
 
-    // --- 計算全壘打原價與折扣後金額 ---
     function calculateFullHitCost() {
         const getVal = (id) => parseInt(document.getElementById(id).value) || 0;
-
-        // 取得單場相關金額
         const monCost = getVal('mon_total') * getVal('mon_sea');
         const thuCost = getVal('thu_total') * getVal('thu_sea');
         const tue2Cost = getVal('tue2_total') * getVal('tue2_sea');
         const tue3Cost = getVal('tue3_total') * getVal('tue3_sea');
-        
-        // 取得優惠金額
         const discount = getVal('fullhit-discount');
 
-        // 計算原價
         const total2h = monCost + tue2Cost + thuCost;
         const total3h = monCost + tue3Cost + thuCost;
-
-        // 計算折扣後
         const final2h = total2h - discount;
         const final3h = total3h - discount;
 
-        // 更新介面
         document.getElementById('calc-val-2h').textContent = total2h.toLocaleString();
         document.getElementById('calc-val-3h').textContent = total3h.toLocaleString();
-        
         document.getElementById('calc-final-2h').textContent = final2h.toLocaleString();
         document.getElementById('calc-final-3h').textContent = final3h.toLocaleString();
     }
 
-    // --- 儲存與讀取設定 (LocalStorage) ---
     function saveSettings() {
         const idsToSave = [
             'period-input', 'fullhit-discount', 'expense-data',
@@ -338,13 +382,11 @@
             'thu_venue', 'thu_total', 'thu_off', 'thu_drop', 'thu_sea', 'thu_note',
             'sat_venue', 'sat_total', 'sat_off', 'sat_drop', 'sat_note'
         ];
-
         const data = {};
         idsToSave.forEach(id => {
             const el = document.getElementById(id);
             if(el) data[id] = el.value;
         });
-
         localStorage.setItem('badmintonPlanData', JSON.stringify(data));
         alert('✅ 設定已儲存！下次打開網頁將自動載入。');
     }
@@ -358,14 +400,12 @@
                 if (el) el.value = data[key];
             }
         }
-        calculateFullHitCost(); // 載入後計算一次
+        calculateFullHitCost();
     }
 
-    // --- 1. 生成表格與行事曆 ---
     function generateTable() {
         const periodText = document.getElementById('period-input').value;
         document.getElementById('table-title').textContent = `${periodText} 季打費用及優惠方案`;
-        
         const fullHitVal = parseInt(document.getElementById('fullhit-discount').value) || 0;
         const tbody = document.getElementById('result-body');
         const tfoot = document.getElementById('result-foot');
@@ -382,18 +422,16 @@
 
         let offDaysSummary = [];
         let allOffDates = [];
-
         let idx = 1;
+
         inputs.forEach(row => {
             const total = parseInt(document.getElementById(`${row.id}_total`).value) || 0;
             const drop = parseInt(document.getElementById(`${row.id}_drop`).value) || 0;
             const seaPerVal = document.getElementById(`${row.id}_sea`).value;
             const seaPer = parseInt(seaPerVal) || 0;
             const off = document.getElementById(`${row.id}_off`).value;
-            // 讀取備註 (使用 let 以便修改)
             let note = document.getElementById(`${row.id}_note`).value;
 
-            // --- 新增這段：如果備註包含「請假不退費」，加上紅色樣式 ---
             if (note.includes('請假不退費')) {
                 note = `<span style="color: red; font-weight: bold;">${note}</span>`;
             }
@@ -401,9 +439,7 @@
             if (off.trim() !== '') {
                 offDaysSummary.push({ name: row.name.split(' ')[0], weekDay: row.weekDay, date: off });
                 const dates = off.match(/(\d+[\/.]\d+)/g);
-                if (dates) {
-                    allOffDates.push(...dates.map(d => d.replace('.', '/')));
-                }
+                if (dates) { allOffDates.push(...dates.map(d => d.replace('.', '/'))); }
             }
 
             let originalTotal = total * drop;
@@ -427,7 +463,6 @@
             
             let middleSection = '';
             if (row.id === 'sat') {
-                // 週六特殊處理：合併欄位且無粗體
                 middleSection = `<td colspan="4" class="text-center">${off}</td>`; 
             } else {
                 middleSection = `
@@ -452,16 +487,13 @@
             tbody.appendChild(tr);
         });
 
-        // 整理不開團日期文字 (使用 Set 去重)
         const dayOrder = ['一', '二', '四', '六'];
-        let offDaysHTML = '<ul style="list-style: none; padding: 0; margin: 0;">';
+        let offDaysHTML = '<ul>';
         dayOrder.forEach(day => {
             const entries = offDaysSummary.filter(item => item.weekDay === day);
             const uniqueDates = [...new Set(entries.map(item => item.date))];
             const dateStr = uniqueDates.join('、');
-            if(dateStr) {
-                offDaysHTML += `<li>週${day}：${dateStr}</li>`;
-            }
+            if(dateStr) { offDaysHTML += `<li>週${day}：${dateStr}</li>`; }
         });
         offDaysHTML += '</ul>';
 
@@ -516,7 +548,6 @@
         generateCalendar(allOffDates);
     }
 
-    // --- 1.5 行事曆 ---
     function generateCalendar(userOffDates) {
         const grid = document.getElementById('calendar-grid');
         grid.innerHTML = '';
@@ -553,8 +584,6 @@
         });
     }
 
-    // --- 2. 收支與人數分析邏輯 ---
-    let charts = {};
     function analyzeData() {
         const text = document.getElementById('expense-data').value.trim();
         const lines = text.split('\n');
@@ -619,7 +648,6 @@
             if (charts[id]) { charts[id].destroy(); }
         });
 
-        // 2. 圓餅圖共用設定
         const pieOpts = {
             responsive: true,
             maintainAspectRatio: false,
@@ -645,23 +673,11 @@
                         return `${label}\n$${value.toLocaleString()} (${pct}%)`;
                     }
                 },
-                tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = (value * 100 / total).toFixed(1);
-                            return `${label}: ${value.toLocaleString('zh-TW')} (${percentage}%)`;
-                        }
-                    }
-                }
+                tooltip: { enabled: true }
             },
             layout: { padding: 20 }
         };
 
-        // 3. 繪製支出圓餅圖
         charts['chart-expense'] = new Chart(document.getElementById('chart-expense'), {
             type: 'pie',
             data: {
@@ -669,14 +685,12 @@
                 datasets: [{ 
                     data: [expense.venue, expense.ball, expense.other], 
                     backgroundColor: ['#B3E5FC', '#E8F5E9', '#F5F5F5'], 
-                    borderColor: '#ccc', 
-                    borderWidth: 1 
+                    borderColor: '#ccc', borderWidth: 1 
                 }]
             },
             options: pieOpts
         });
 
-        // 4. 繪製收入圓餅圖
         charts['chart-income'] = new Chart(document.getElementById('chart-income'), {
             type: 'pie',
             data: {
@@ -684,29 +698,22 @@
                 datasets: [{ 
                     data: [income.season, income.mon, income.tue, income.thu, income.sat, income.other], 
                     backgroundColor: ['#FFC107', '#FCE4EC', '#E8F5E9', '#B3E5FC', '#FFF3E0', '#9E9E9E'], 
-                    borderColor: '#ccc', 
-                    borderWidth: 1 
+                    borderColor: '#ccc', borderWidth: 1 
                 }]
             },
             options: pieOpts
         });
 
-        // 5. 繪製長條圖
         charts['chart-headcount'] = new Chart(document.getElementById('chart-headcount'), {
             type: 'bar',
             data: {
                 labels: ['週一', '週二', '週四', '週六'],
                 datasets: [
-                    // --- 單時段 (基礎色系) ---
                     { label: '週一 (2h)', data: [hc['週一'], 0, 0, 0], backgroundColor: '#66BB6A', stack: 'main', borderColor: 'white', borderWidth: 2 },
                     { label: '週四 (3h)', data: [0, 0, hc['週四'], 0], backgroundColor: '#4FC3FF', stack: 'main', borderColor: 'white', borderWidth: 2 },
-                    
-                    // --- 週六堆疊 (由深到淺) ---
                     { label: '週六 (4h)', data: [0, 0, 0, hc['週六 4h']], backgroundColor: '#E65100', stack: 'main', borderColor: 'white', borderWidth: 2 },
                     { label: '週六 (3h)', data: [0, 0, 0, hc['週六 3h']], backgroundColor: '#FF9800', stack: 'main', borderColor: 'white', borderWidth: 2 },
                     { label: '週六 (2h)', data: [0, 0, 0, hc['週六 2h']], backgroundColor: '#FFB74D', stack: 'main', borderColor: 'white', borderWidth: 2 },
-
-                    // --- 週二堆疊 (由深到淺) ---
                     { label: '週二 (3h)', data: [0, hc['週二 3h'], 0, 0], backgroundColor: '#81C784', stack: 'main', borderColor: 'white', borderWidth: 2 },
                     { label: '週二 (2h)', data: [0, hc['週二 2h'], 0, 0], backgroundColor: '#A5D6A7', stack: 'main', borderColor: 'white', borderWidth: 2 }
                 ]
@@ -716,53 +723,27 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: { 
-                        display: true, 
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 12,
-                            padding: 15,
-                            filter: (item) => !item.text.includes('週六 (3h)') && !item.text.includes('週六 (2h)') 
-                        }
+                        display: true, position: 'bottom',
+                        labels: { boxWidth: 12, padding: 15, filter: (item) => !item.text.includes('週六 (3h)') && !item.text.includes('週六 (2h)') }
                     }, 
                     datalabels: { 
-                        color: '#111', 
-                        font: { weight: 'bold', size: 11 }, 
+                        color: '#111', font: { weight: 'bold', size: 11 }, 
                         formatter: v => v > 0 ? v : '', 
-                        anchor: 'center', 
-                        align: 'center',
+                        anchor: 'center', align: 'center',
                         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                        borderRadius: 3,
-                        padding: 4
+                        borderRadius: 3, padding: 4
                     }
                 },
                 scales: { 
                     x: { 
                         stacked: true,
-                        // 強力移除網格線
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                            color: 'transparent',
-                            borderColor: 'transparent',
-                            tickColor: 'transparent',
-                            borderWidth: 0
-                        },
-                        border: {
-                            display: false
-                        },
-                        ticks: {
-                            font: { size: 14, weight: 'bold' },
-                            color: '#333'
-                        }
+                        grid: { display: false, drawOnChartArea: false, drawTicks: false, color: 'transparent', borderColor: 'transparent', tickColor: 'transparent', borderWidth: 0 },
+                        border: { display: false },
+                        ticks: { font: { size: 14, weight: 'bold' }, color: '#333' }
                     }, 
                     y: { 
-                        stacked: true, 
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: '總人次'
-                        }
+                        stacked: true, beginAtZero: true,
+                        title: { display: true, text: '總人次' }
                     } 
                 }
             }
