@@ -592,19 +592,44 @@
         renderCharts(expense, income, hc);
     }
 
-    function renderCharts(expense, income, hc) {
+function renderCharts(expense, income, hc) {
         ['chart-expense', 'chart-income', 'chart-headcount'].forEach(id => { if (charts[id]) { charts[id].destroy(); } });
+        
         const pieOpts = {
             responsive: true, maintainAspectRatio: false,
             plugins: {
                 legend: { position: 'right', labels: { boxWidth: 12 } },
-                datalabels: { display: 'auto', color: '#333', font: { weight: 'bold', size: 12 }, backgroundColor: 'rgba(255,255,255,0.85)', borderRadius: 4, padding: 6, formatter: (value, ctx) => { const label = ctx.chart.data.labels[ctx.dataIndex]; const total = ctx.dataset.data.reduce((a, b) => a + b, 0); const pct = (value * 100 / total).toFixed(1); return `${label}\n$${value.toLocaleString()} (${pct}%)`; } },
+                datalabels: { 
+                    // 這裡控制顯示邏輯
+                    display: function(context) {
+                        const value = context.dataset.data[context.dataIndex];
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        // 只要大於 1.5% 就顯示 (您可以把 1.5 改小，顯示更多)
+                        return (value * 100 / total) > 1.5;
+                    },
+                    color: '#333', 
+                    font: { weight: 'bold', size: 11 }, // 字體改 11 比較不會擠
+                    backgroundColor: 'rgba(255,255,255,0.9)', 
+                    borderRadius: 4, 
+                    padding: 4, 
+                    anchor: 'center', // 標籤定位在區塊中心
+                    align: 'center',  // 標籤對齊中心
+                    formatter: (value, ctx) => { 
+                        const label = ctx.chart.data.labels[ctx.dataIndex]; 
+                        const total = ctx.dataset.data.reduce((a, b) => a + b, 0); 
+                        const pct = (value * 100 / total).toFixed(1); 
+                        return `${label}\n$${value.toLocaleString()} (${pct}%)`; 
+                    } 
+                },
                 tooltip: { enabled: true, callbacks: { label: function(context) { const label = context.label || ''; const value = context.parsed; const total = context.dataset.data.reduce((a, b) => a + b, 0); const percentage = (value * 100 / total).toFixed(1); return `${label}: ${value.toLocaleString('zh-TW')} (${percentage}%)`; } } }
             },
             layout: { padding: 20 }
         };
+        
         charts['chart-expense'] = new Chart(document.getElementById('chart-expense'), { type: 'pie', data: { labels: ['場地費', '球費', '雜項'], datasets: [{ data: [expense.venue, expense.ball, expense.other], backgroundColor: ['#B3E5FC', '#E8F5E9', '#F5F5F5'], borderColor: '#ccc', borderWidth: 1 }] }, options: pieOpts });
         charts['chart-income'] = new Chart(document.getElementById('chart-income'), { type: 'pie', data: { labels: ['季打', '週一', '週二', '週四', '週六', '其他'], datasets: [{ data: [income.season, income.mon, income.tue, income.thu, income.sat, income.other], backgroundColor: ['#FFC107', '#FCE4EC', '#E8F5E9', '#B3E5FC', '#FFF3E0', '#9E9E9E'], borderColor: '#ccc', borderWidth: 1 }] }, options: pieOpts });
+        
+        // 長條圖設定保持不變
         charts['chart-headcount'] = new Chart(document.getElementById('chart-headcount'), { type: 'bar', data: { labels: ['週一', '週二', '週四', '週六'], datasets: [{ label: '週一', data: [hc['週一'], 0, 0, 0], backgroundColor: '#F06292', stack: 'main' }, { label: '週四', data: [0, 0, hc['週四'], 0], backgroundColor: '#4FC3F7', stack: 'main' }, { label: '週二 3h', data: [0, hc['週二 3h'], 0, 0], backgroundColor: '#66BB6A', stack: 'main' }, { label: '週六 4h', data: [0, 0, 0, hc['週六 4h']], backgroundColor: '#FF9800', stack: 'main' }, { label: '週六 3h', data: [0, 0, 0, hc['週六 3h']], backgroundColor: '#FFB74D', stack: 'main' }, { label: '週二 2h', data: [0, hc['週二 2h'], 0, 0], backgroundColor: '#C8E6C9', stack: 'main' }, { label: '週六 2h', data: [0, 0, 0, hc['週六 2h']], backgroundColor: '#FFE0B2', stack: 'main' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: '#333', font: { weight: 'bold' }, formatter: v => v > 0 ? v : '' } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } } } });
     }
 
