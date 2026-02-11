@@ -11,7 +11,7 @@
     
     <style>
         /* 全局設定 */
-        * { box-sizing: border-box; } /* 關鍵：防止 padding 撐開寬度導致線條超出 */
+        * { box-sizing: border-box; }
         body { font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif; margin: 0; padding: 10px; background-color: #f4f7f6; color: #333; }
         .container { max-width: 1400px; margin: auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
         
@@ -19,7 +19,7 @@
         h1 { color: #007bff; text-align: center; border-bottom: 3px solid #007bff; padding-bottom: 10px; margin-bottom: 30px; font-size: 1.6em; white-space: nowrap; }
         .mobile-break { display: none; }
         
-        /* 區塊標題 H2 修復 */
+        /* 區塊標題 H2 */
         h2 { 
             border-left: 6px solid #ffc107; 
             padding-left: 12px; 
@@ -28,34 +28,28 @@
             margin-bottom: 15px; 
             font-size: 1.4em; 
             line-height: 1.4;
-            /* 修復右邊線條超出問題：不設 border-bottom，或確保寬度正確 */
         }
         
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         
-        /* 表格設定 - 隱藏滾動條但保留功能 */
+        /* 表格設定 */
         .table-responsive { 
             width: 100%; 
             overflow-x: auto; 
             margin-top: 15px; 
-            border: 1px solid #ccc; /* 表格最外框 */
+            border: 1px solid #ccc; 
             border-radius: 4px;
-            /* 隱藏滾動條 */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE 10+ */
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
         }
-        .table-responsive::-webkit-scrollbar { 
-            display: none; /* Chrome/Safari */
-        }
+        .table-responsive::-webkit-scrollbar { display: none; }
 
         table { width: 100%; border-collapse: collapse; font-size: 0.95em; table-layout: fixed; min-width: 1000px; }
         th, td { border: 1px solid #ccc; padding: 10px 5px; text-align: center; vertical-align: middle; word-wrap: break-word; }
         th { background-color: #e9ecef; color: #495057; font-weight: bold; }
         
-        /* 修正表格與下方區塊分離 */
         #result-table { margin-bottom: 0; border: none; }
         #result-table td, #result-table th { border: 1px solid #ccc; }
-        /* 移除表格最外層重複的邊框，由 .table-responsive 負責 */
         #result-table tr:first-child th { border-top: none; }
         #result-table tr:last-child td { border-bottom: none; }
         #result-table th:first-child, #result-table td:first-child { border-left: none; }
@@ -69,16 +63,18 @@
         /* === 底部資訊區塊 (獨立 DIV) === */
         .bottom-info-container {
             display: flex;
-            gap: 20px; /* 兩個區塊的間距 */
-            margin-top: 20px; /* 與上方表格的間距 */
+            gap: 20px; 
+            margin-top: 20px;
+            margin-bottom: 40px; /* 修正：增加與行事曆的間距 */
+            align-items: stretch; /* 修正：確保左右高度一致 */
         }
         
         .info-box {
-            flex: 1; /* 平均分配寬度 */
+            flex: 1; 
             border-radius: 4px;
-            overflow: hidden; /* 確保圓角 */
-            /* 移除外框線，改用顏色區塊呈現，或保留細框線 */
-            /* border: 1px solid #ccc; */
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
         }
 
         /* 左側：不開團日期 */
@@ -93,9 +89,9 @@
         .left-box .box-body {
             background-color: #FCE4EC;
             padding: 15px;
-            min-height: 100px;
+            flex-grow: 1; /* 填滿高度 */
         }
-        .off-date-content ul { margin: 0; padding-left: 0; list-style: none; line-height: 1.8; }
+        .off-date-content ul { margin: 0; padding-left: 0; list-style: none; line-height: 1.8; font-size: 1em; }
 
         /* 右側：組合優惠 */
         .right-box .box-header {
@@ -109,15 +105,26 @@
         .right-box .box-body {
             background-color: #FFF3E0;
             padding: 15px;
-            min-height: 100px;
+            flex-grow: 1; /* 填滿高度 */
         }
         
-        /* 組合優惠列表樣式 */
-        .combo-list { display: flex; flex-direction: column; gap: 10px; }
-        .combo-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #FFCC80; padding-bottom: 8px; }
-        .combo-item:last-child { border-bottom: none; padding-bottom: 0; }
-        .combo-name { font-weight: bold; color: #333; }
-        .combo-price { font-weight: bold; color: #333; }
+        /* 組合優惠列表樣式 (修正：移除線條與粗體) */
+        .combo-list { display: flex; flex-direction: column; gap: 12px; }
+        .combo-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            /* border-bottom: 1px dashed #FFCC80;  <-- 移除分隔線 */
+            padding-bottom: 0; 
+        }
+        .combo-name { 
+            color: #333; 
+            font-size: 1em; /* 移除 font-weight: bold */
+        }
+        .combo-price { 
+            color: #333; 
+            font-size: 1em; /* 移除 font-weight: bold */
+        }
 
         /* 輸入區樣式 */
         .input-row { display: flex; align-items: center; margin-bottom: 15px; font-size: 1.1em; font-weight: bold; }
