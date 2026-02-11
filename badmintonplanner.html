@@ -31,57 +31,26 @@
         .text-center { text-align: center !important; }
         .text-left { text-align: left !important; padding-left: 15px !important; }
         
-        /* === 關鍵修正：底部組合優惠樣式 === */
-        /* 標題儲存格 */
-        .footer-header-cell {
-            background-color: #FCE4EC !important; /* 左邊粉底預設，JS會蓋 */
-            text-align: left !important;
-            vertical-align: bottom !important; /* 文字靠下對齊線條 */
-            padding: 15px 15px 5px 15px !important;
-            border-bottom: none !important; /* 移除底部格線 */
+        /* 底部組合優惠樣式修正 */
+        .footer-title-div {
+            display: block;
+            font-weight: bold;
+            font-size: 1.1em;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            text-align: left;
         }
         
-        /* 標題文字樣式 (線條) */
-        .box-title { display: block; font-weight: bold; font-size: 1.1em; padding-bottom: 5px; margin-bottom: 0; }
-        .title-pink { color: #C2185B; border-bottom: 2px solid #F48FB1; }
-        .title-orange { color: #E65100; border-bottom: 2px solid #FF9800; }
-
-        /* 內容儲存格 */
-        .footer-content-cell {
-            text-align: left !important;
-            vertical-align: top !important;
-            padding: 5px 15px 15px 15px !important;
-            border-top: none !important; /* 移除頂部格線，與標題融合 */
-        }
-
-        /* 左側內容區 */
-        .left-content-bg { background-color: #FCE4EC !important; border-right: 1px solid #ccc !important; }
-        .off-date-content ul { margin: 10px 0 0 0; padding-left: 0; list-style: none; line-height: 1.6; }
-
-        /* 右側組合優惠區 - 移除內部線條 */
-        .right-header-bg { background-color: #FFF3E0 !important; border-left: 1px solid #ccc !important; }
-        .right-content-bg { background-color: #FFF3E0 !important; border-left: 1px solid #ccc !important; }
+        /* 顏色定義 */
+        .pink-text { color: #C2185B; }
+        .pink-border { border-bottom: 2px solid #F48FB1; }
+        .orange-text { color: #E65100; }
+        .orange-border { border-bottom: 2px solid #FF9800; }
         
-        /* 組合項目列：移除儲存格邊框，創造乾淨的列表感 */
-        .combo-item-row td {
-            background-color: #FFF3E0 !important;
-            border-top: none !important;
-            border-bottom: none !important;
-            padding: 4px 15px !important;
-            text-align: left !important;
-        }
-        /* 最後一列加回底線 */
-        .combo-item-row-last td {
-            background-color: #FFF3E0 !important;
-            border-bottom: 1px solid #ccc !important;
-            border-top: none !important;
-            padding: 4px 15px 15px 15px !important; /* 底部多一點留白 */
-            text-align: left !important;
-        }
+        .off-date-list ul { margin: 0; padding-left: 0; list-style: none; line-height: 1.6; text-align: left; }
+        .combo-flex { display: flex; justify-content: space-between; width: 100%; padding: 0 10px; }
 
-        .combo-flex { display: flex; justify-content: space-between; width: 100%; }
-
-        /* 其他樣式 */
+        /* 輸入與計算樣式 */
         .input-row { display: flex; align-items: center; margin-bottom: 15px; font-size: 1.1em; font-weight: bold; }
         .period-input { width: 300px; margin-left: 10px; text-align: left; }
         .fullhit-container { margin-top: 20px; display: flex; gap: 20px; align-items: center; font-size: 0.95em; flex-wrap: wrap; }
@@ -393,47 +362,45 @@
         });
         offListHtml += '</ul>';
 
-        // === 關鍵修正：底部結構重組，確保左右線條水平對齊 ===
-        // 分離「標題列」與「內容列」
+        // === 修正後的底部結構 ===
+        // 左側：1-6欄 (對齊到每場零打)
+        // 右側：7-12欄 (對齊到最後)
         tfoot.innerHTML = `
             <tr style="height:20px;"><td colspan="12" style="border:none;background:#fff;"></td></tr>
             
-            <!-- 標題列：左邊粉紅標題，右邊橘色標題 -->
+            <!-- 1. 標題列 -->
             <tr>
-                <td colspan="6" class="footer-header-cell left-content-bg">
-                    <span class="box-title title-pink">${periodText} 不開團日期</span>
+                <td colspan="6" style="background-color: #FCE4EC !important; text-align: left !important; vertical-align: bottom !important; padding: 10px 15px 5px 15px !important; border-bottom: none !important;">
+                    <div class="footer-title-div pink-text pink-border">${periodText} 不開團日期</div>
                 </td>
-                <td colspan="6" class="footer-header-cell right-header-bg">
-                    <span class="box-title title-orange">組合優惠</span>
+                <td colspan="6" style="background-color: #FFF3E0 !important; text-align: left !important; vertical-align: bottom !important; padding: 10px 15px 5px 15px !important; border-left: 1px solid #ccc !important; border-bottom: none !important;">
+                    <div class="footer-title-div orange-text orange-border">組合優惠</div>
                 </td>
             </tr>
 
-            <!-- 內容列：左邊rowspan內容，右邊是每一行項目 -->
+            <!-- 2. 內容列 (左側 rowspan, 右側分行) -->
             <tr class="combo-item-row">
-                <td rowspan="3" colspan="6" class="footer-content-cell left-content-bg">
-                    <div class="off-date-content">${offListHtml}</div>
+                <td rowspan="3" colspan="6" style="background-color: #FCE4EC !important; text-align: left !important; vertical-align: top !important; padding: 0 15px 15px 15px !important; border-top: none !important;">
+                    <div class="off-date-list">${offListHtml}</div>
                 </td>
-                <td colspan="6" class="right-content-bg">
+                <td colspan="6" style="background-color: #FFF3E0 !important; border-left: 1px solid #ccc !important; border-top: none !important; border-bottom: none !important; padding: 4px 15px !important;">
                     <div class="combo-flex"><span>2 個任意組合</span><span>- 200</span></div>
                 </td>
             </tr>
             <tr class="combo-item-row">
-                <td colspan="6" class="right-content-bg">
+                <td colspan="6" style="background-color: #FFF3E0 !important; border-left: 1px solid #ccc !important; border-top: none !important; border-bottom: none !important; padding: 4px 15px !important;">
                     <div class="combo-flex"><span>全壘打優惠 (週一＋週二＋週四)</span><span>- ${fullHitVal}</span></div>
                 </td>
             </tr>
             <tr class="combo-item-row-last">
-                <td colspan="6" class="right-content-bg" style="border-bottom:1px solid #ccc !important;">
+                <td colspan="6" style="background-color: #FFF3E0 !important; border-left: 1px solid #ccc !important; border-top: none !important; border-bottom: 1px solid #ccc !important; padding: 4px 15px 15px 15px !important;">
                     <div class="combo-flex"><span>在學學生優惠 (可與上述優惠合併使用)</span><span>- 100</span></div>
                 </td>
-            </tr>
-            <tr style="height: 40px;">
-                <td colspan="12" style="border:none; background: #fff;"></td>
             </tr>
         `;
         document.getElementById('output-area').style.display = 'block';
 
-        // 智慧行事曆邏輯 (修正日期顯示)
+        // 智慧行事曆邏輯
         let year = 2026, startMonth = 0;
         const yearMatch = periodText.match(/20\d{2}/);
         if (yearMatch) year = parseInt(yearMatch[0]);
@@ -462,7 +429,7 @@
 
         months.forEach(m => {
             const d = new Date(year, m, 1);
-            // 修正：直接用數字+月，避免產生 "4月月"
+            // 修正月份顯示
             const mName = (m + 1) + '月'; 
             let html = `<div class="month-card"><div class="month-title">${mName}</div><table class="cal-table"><thead><tr><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th></tr></thead><tbody><tr>`;
             
