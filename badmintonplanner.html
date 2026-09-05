@@ -525,8 +525,8 @@
                 let cls = '';
                 
                 if (userOffs.includes(dStr)) cls = 'day-off';
-                else if (holidays.includes(dStr)) cls = 'day-holiday';
                 else if (playDays.includes(day)) cls = 'day-play';
+                else if (holidays.includes(dStr)) cls = 'day-holiday';
 
                 html += `<td><div class="${cls}">${dNum}</div></td>`;
                 if ((day+6)%7 === 6) html += `</tr><tr>`;
